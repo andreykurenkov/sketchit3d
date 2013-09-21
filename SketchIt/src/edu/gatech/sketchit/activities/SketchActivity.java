@@ -23,6 +23,8 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.LinearLayout;
+import android.widget.ViewFlipper;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{
 	private static ColorDetector[] detectors;
@@ -56,14 +58,13 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.full_screen_view);
+		setContentView(R.id.full_screen_view);
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.full_screen_view);
 		mOpenCvCameraView.setCvCameraViewListener(this);
 
 
-		//mGLView = new MyGLSurfaceView(this);
-		//setContentView(mGLView);
+		mGLView = new MyGLSurfaceView(this);
+		setContentView(mGLView);
 
 	}
 
