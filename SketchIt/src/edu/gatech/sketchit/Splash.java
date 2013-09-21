@@ -99,9 +99,9 @@ public class Splash extends Activity {
         home_new.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	Log.d("SPLASH.java", "New Clicked");
-            	Intent intent = new Intent(Splash.this, SketchActivity.class);
-                startActivity(intent);      
-                finish();
+            	//Intent intent = new Intent(Splash.this, SketchActivity.class);
+                //startActivity(intent);      
+                //finish();
             }
         });
         home_open.setOnClickListener(new View.OnClickListener() {

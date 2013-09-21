@@ -31,9 +31,7 @@
         <activity
             android:name="edu.gatech.sketchit.activities.CalibrationActivity">
         </activity>
-        <activity
-            android:name="edu.gatech.sketchit.activities.SketchActivity">
-        </activity>
+  
         
     </application>
 
