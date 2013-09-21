@@ -9,6 +9,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
+import org.opencv.core.Point3;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -19,10 +20,9 @@ public class ColorDetector {
 	// Lower and Upper bounds for range checking in HSV color space
 	private Scalar lowerBound;
 	private Scalar upperBound;
-	// Color radius for range checking in HSV color space
-	private Scalar colorRadius;
 	//More efficient to just create here
 	private Mat spectrum;
+	private double originalArea;
 
 	public static Scalar getHSVScalar(int red, int green, int blue){
 		float[] hsv = new float[3];
@@ -30,17 +30,16 @@ public class ColorDetector {
 		return new Scalar((int)hsv[0],(int)hsv[1],(int)hsv[2]);
 	}
 
-	public ColorDetector(int red, int green, int blue){
-		this(getHSVScalar(red,green,blue));
+	public ColorDetector(double originalArea, int red, int green, int blue){
+		this(originalArea, getHSVScalar(red,green,blue));
 	}
 
-	public ColorDetector(Scalar hsvColor){
-		this(hsvColor,new Scalar(15,30,25,0));
+	public ColorDetector(double originalArea, Scalar hsvColor){
+		this(originalArea, hsvColor,new Scalar(15,30,25,0));
 	}
 
-	public ColorDetector(Scalar hsvColor, Scalar colorRadius){
-		this.colorRadius = colorRadius;
-		
+	public ColorDetector(double originalArea, Scalar hsvColor, Scalar colorRadius){
+		this.originalArea = originalArea;
 		double minH = (hsvColor.val[0] >= colorRadius.val[0]) ? hsvColor.val[0]-colorRadius.val[0] : 0;
 		double maxH = (hsvColor.val[0]+colorRadius.val[0] <= 255) ? hsvColor.val[0]+colorRadius.val[0] : 255;
 
@@ -64,20 +63,16 @@ public class ColorDetector {
 	Mat mDilatedMask = new Mat();
 	Mat mHierarchy = new Mat();
 
-	public void setColorRadius(Scalar radius) {
-		colorRadius = radius;
-	}
-
 	public Mat getSpectrum() {
 		return spectrum;
 	}
 
-	public MatOfPoint getBiggestCountour(Mat rgbaImage) {
+	public MatOfPoint getBiggestContour(Mat rgbaImage) {
 		return getBiggestContour(getContours(rgbaImage));
 	}
 	
-	public List<MatOfPoint>  getContours(Mat rgbaImage) {
-		return this.getContours(rgbaImage,0.1);
+	public List<MatOfPoint> getContours(Mat rgbaImage) {
+		return this.getContours(rgbaImage,0.2);
 	}
 	
 	public List<MatOfPoint> getContours(Mat rgbaImage,double minContourArea ) {
@@ -112,7 +107,7 @@ public class ColorDetector {
 		return toReturn;
 	}
 
-	public Point detectBiggestBlob(Mat image){
+	public Point3 detectBiggestBlob(Mat image){
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 		Mat hierarchy = new Mat();
 
@@ -120,7 +115,7 @@ public class ColorDetector {
 
 		MatOfPoint biggest = getBiggestContour(contours);
 		Rect boundRect = Imgproc.boundingRect(biggest);
-		return getCenterPoint(boundRect);
+		return getPoint3(boundRect);
 	}
 	
 	public static MatOfPoint getBiggestContour(List<MatOfPoint> contours){
@@ -140,6 +135,12 @@ public class ColorDetector {
 		Point tl= rect.tl();
 		Point br= rect.br();
 		return new Point((tl.x + br.x)/2,(tl.y + br.y)/2);
+	}
+	
+	public Point3 getPoint3(Rect rect){
+		Point tl= rect.tl();
+		Point br= rect.br();
+		return new Point3((tl.x + br.x)/2,(tl.y + br.y)/2,rect.area()/originalArea);
 	}
 
 	public static double getCountourArea(MatOfPoint contour){

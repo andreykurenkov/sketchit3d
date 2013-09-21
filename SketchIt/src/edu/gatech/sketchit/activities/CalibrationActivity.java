@@ -31,7 +31,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
     private static final String  TAG              = "OCVSample::Activity";
 
     private Mat                  mRgba;
-    private ColorDetector    	mDetector;
+    private ColorDetector    	 mDetector;
     private Mat                  mSpectrum;
     private Size                 SPECTRUM_SIZE;
     private Scalar               CONTOUR_COLOR;
@@ -114,7 +114,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
     	int cols = mRgba.cols();
         int rows = mRgba.rows();
 
-        Rect centerRect = new Rect(cols/2-30,rows/2-50,60,100);
+        Rect centerRect = new Rect(cols/2-25,rows/2-35,50,70);
 
         Mat centerRectRgba = mRgba.submat(centerRect);
 
@@ -127,9 +127,9 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
         int pointCount = centerRect.width*centerRect.height;
         for (int i = 0; i < centerColorHsv.val.length; i++)
         	centerColorHsv.val[i] /= pointCount;
-        Scalar centerColorRGB = converScalarHsv2Rgba(centerColorHsv);
+        //Scalar centerColorRGB = convertScalarHsv2Rgba(centerColorHsv);
 
-        mDetector = new ColorDetector(centerColorHsv);
+        mDetector = new ColorDetector(50*70,centerColorHsv);
         Imgproc.resize(mDetector.getSpectrum(), mSpectrum, SPECTRUM_SIZE);
 
         return false; // don't need subsequent touch events
@@ -137,16 +137,11 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
-       // Mat result = new Mat();
-        //mRgba.copyTo(result);
 
         int cols = mRgba.cols();
         int rows = mRgba.rows();
 
-        int xOffset = (mOpenCvCameraView.getWidth() - cols) / 2;
-        int yOffset = (mOpenCvCameraView.getHeight() - rows) / 2;
-
-        Rect centerRect = new Rect(cols/2-40,rows/2-60,80,120);
+        Rect centerRect = new Rect(cols/2-25,rows/2-35,50,70);
 
         Core.rectangle(mRgba, centerRect.tl(), centerRect.br(), new Scalar(255, 255, 0), 2, 8, 0 );
         Core.putText(mRgba, "Place finger "+fingers[currentFinger]+" in rectangle.", new Point(10,60), 0/*font*/, 1, new Scalar(255, 0, 0, 255), 3);
@@ -159,7 +154,8 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
         return mRgba;
     }
 
-    private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
+    @SuppressWarnings("unused")
+	private Scalar convertScalarHsv2Rgba(Scalar hsvColor) {
         Mat pointMatRgba = new Mat();
         Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
         Imgproc.cvtColor(pointMatHsv, pointMatRgba, Imgproc.COLOR_HSV2RGB_FULL, 4);
