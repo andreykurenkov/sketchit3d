@@ -21,8 +21,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{
 	private static ColorDetector[] detectors;
@@ -56,14 +62,13 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.gl_screen_view);
 
-		setContentView(R.layout.full_screen_view);
-		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.full_screen_view);
+		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
 		mOpenCvCameraView.setCvCameraViewListener(this);
-
-
-		mGLView = new MyGLSurfaceView(this);
-		setContentView(mGLView);
+		MyGLSurfaceView myGLView = new MyGLSurfaceView(this);
+		addContentView(myGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 
 	}
 
@@ -84,6 +89,7 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 
 	@Override
 	public void onCameraViewStarted(int width, int height) {
+
 		// TODO Auto-generated method stub
 
 	}
@@ -124,7 +130,6 @@ class MyGLSurfaceView extends GLSurfaceView {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
-		System.out.println("Creating a new rectangle...");
 		Shape r = new Triangle(new Point3(-.5f, .4f, 0f),
 				new Point3(-0.5f, -0.3f, 0f),
 				new Point3(0.5f, -0.7f, 0f));

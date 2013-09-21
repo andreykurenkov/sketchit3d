@@ -1,6 +1,7 @@
 package edu.gatech.sketchit;
 
 //import edu.gatech.sketchit.activities.CalibrationActivity;
+import edu.gatech.sketchit.activities.CalibrationActivity;
 import edu.gatech.sketchit.activities.SketchActivity;
 import android.os.Bundle;
 import android.app.Activity;
@@ -113,9 +114,9 @@ public class MainMenu extends Activity {
         home_calibrate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	Log.d("SPLASH.java", "Calibrate Clicked");
-//            	Intent intent = new Intent(Splash.this, CalibrationActivity.class);
-//                startActivity(intent);      
-//                finish();
+            	Intent intent = new Intent(MainMenu.this, CalibrationActivity.class);
+                startActivity(intent);      
+                finish();
             }
         });
         home_settings.setOnClickListener(new View.OnClickListener() {
