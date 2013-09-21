@@ -32,9 +32,7 @@ import android.widget.RelativeLayout;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{
 	private static ColorDetector[] detectors;
-
 	private CameraBridgeViewBase mOpenCvCameraView;
-
 	private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
 		public void onManagerConnected(int status) {
@@ -51,14 +49,12 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 			}
 		}
 	};
-
 	public static void launch(Context by, ColorDetector[] detectors){
 		SketchActivity.detectors=detectors;
 		by.startActivity(new Intent(by, SketchActivity.class));  
 	}
 
 	private GLSurfaceView mGLView;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,7 +65,6 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		mOpenCvCameraView.setCvCameraViewListener(this);
 		MyGLSurfaceView myGLView = new MyGLSurfaceView(this);
 		addContentView(myGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
-
 	}
 
 	@Override
@@ -103,10 +98,6 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	@Override
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		Mat mRgba = inputFrame.rgba();
-		Log.i("bro","sup");
-		//for(ColorDetector detector:detectors){
-		//	Point3 point = detector.detectBiggestBlob(mRgba);
-		//}
 		return null;
 	}
 }
