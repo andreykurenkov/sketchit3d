@@ -36,6 +36,7 @@ public class AGLRenderer implements Renderer {
 
 		//draw shapes here
 //		myTriangle.draw(mMVPMatrix);
+		System.out.println("Drawing...");
 		for(Shape shape : shapes) {
 			shape.draw(mMVPMatrix);
 		}
@@ -71,6 +72,6 @@ public class AGLRenderer implements Renderer {
 		return shapes.remove(s);
 	}
 	public void update() {
-		
+		onDrawFrame(null);
 	}
 }

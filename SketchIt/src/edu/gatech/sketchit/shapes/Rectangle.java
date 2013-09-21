@@ -37,6 +37,7 @@ public class Rectangle extends Shape {
 	
 	@Override
 	public void draw(float[] mvpMatrix) {
+		super.draw(mvpMatrix);
 		GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, 
 								GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
 		// Disable vertex array
