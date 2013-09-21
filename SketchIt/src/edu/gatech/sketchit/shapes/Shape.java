@@ -103,4 +103,23 @@ public abstract class Shape {
 		}
 		return vertices;
     }
+    
+    //AASHISH MODIFIED
+    protected int contains_variance = 5;  
+    public abstract boolean contains(Point3 hand);
+    private boolean inLine(Point3 a, Point3 b, Point3 hand){
+    	Point3 origvect = new Point3(a.x - b.x, a.y - b.y, a.z - b.z);
+    	Point3 currvect = new Point3(a.x - hand.x, a.y - hand.y, a.z - hand.z);
+    	
+    	double dotprod = origvect.dot(currvect);
+    	double magorig = Math.sqrt(origvect.x+origvect.y+origvect.z);
+    	double magcurr = Math.sqrt(currvect.x+currvect.y+currvect.z);
+    	double theta = Math.acos(dotprod/(magorig+magcurr));
+    	double normal = magcurr*Math.sin(theta);
+    	
+    	if(normal < contains_variance)
+    		return true;
+    	return false;
+    }
+    
 }

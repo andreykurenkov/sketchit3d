@@ -16,4 +16,12 @@ public class Line extends Shape {
 		// Disable vertex array
 		GLES20.glDisableVertexAttribArray(mPositionHandle);
 	}
+
+	@Override
+	public boolean contains(Point3 hand) {
+		if(inLine(vertices[0], vertices[1], hand))
+			return true;
+		return false;
+	}
+	
 }

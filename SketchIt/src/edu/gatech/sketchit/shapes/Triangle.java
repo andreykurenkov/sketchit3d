@@ -17,4 +17,11 @@ public class Triangle extends Shape {
 		// Disable vertex array
 		GLES20.glDisableVertexAttribArray(mPositionHandle);
 	}
+
+	@Override
+	public boolean contains(Point3 hand) {
+		if(inLine(vertices[0], vertices[1], hand) || inLine(vertices[1], vertices[2], hand) || inLine(vertices[0], vertices[2], hand))
+			return true;
+		return false;
+	}
 }

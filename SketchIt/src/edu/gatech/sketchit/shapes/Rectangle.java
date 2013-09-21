@@ -11,8 +11,7 @@ import android.opengl.GLES20;
 public class Rectangle extends Shape {
     private static final short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
     private ShortBuffer drawListBuffer;
-    
-    
+
 	public Rectangle(Point3 a, Point3 b, Point3 c, Point3 d) {
 		super(a,b,c,d);
 	}
@@ -33,5 +32,12 @@ public class Rectangle extends Shape {
 								GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
 		// Disable vertex array
 		GLES20.glDisableVertexAttribArray(mPositionHandle);
+	}
+
+	@Override
+	public boolean contains(Point3 hand) {
+		if(inLine(vertices[0], vertices[1], hand) || inLine(vertices[1], vertices[2], hand) || inLine(vertices[2], vertices[3], hand) || inLine(vertices[0], vertices[3], hand))
+			return true;
+		return false;
 	}
 }

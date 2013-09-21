@@ -2,8 +2,6 @@ package edu.gatech.sketchit.sketch;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point3;
-
-import android.graphics.Point;
 import android.os.SystemClock;
 
 public class HandState {
@@ -27,7 +25,7 @@ public class HandState {
 		clickedCount = 0;
 	}
 	
-	public Point3 isClicking(Mat img){
+	public Point3 isLeftClick(Mat img){
 		Point3 pointingPoint = pointing.getColorDetector().detectBiggestBlob(img);
 		Point3 thumbPoint = thumb.getColorDetector().detectBiggestBlob(img);
 		Point3 diffPoint = new Point3( pointingPoint.x - thumbPoint.x,
@@ -40,8 +38,21 @@ public class HandState {
 		return dist<CLICK_DIST?mid:null;
 	}
 	
+	public Point3 isRightClick(Mat img){
+		Point3 middlePoint = middle.getColorDetector().detectBiggestBlob(img);
+		Point3 thumbPoint = thumb.getColorDetector().detectBiggestBlob(img);
+		Point3 diffPoint = new Point3( middlePoint.x - thumbPoint.x,
+									   middlePoint.y - thumbPoint.y,
+									   middlePoint.z - thumbPoint.z);
+		double dist = Math.sqrt(diffPoint.dot(diffPoint));
+		Point3 mid = new Point3( (middlePoint.x + thumbPoint.x)/2,
+								 (middlePoint.y + thumbPoint.y)/2,
+				   				 (middlePoint.z + thumbPoint.z)/2);
+		return dist<CLICK_DIST?mid:null;
+	}
+	
 	public Point3 updateClickedState(Mat img){
-		Point3 click = isClicking(img);
+		Point3 click = isLeftClick(img);
 		if(click!=null){
 			if(clickedCount == 0)
 				timeOfDown = SystemClock.uptimeMillis();
