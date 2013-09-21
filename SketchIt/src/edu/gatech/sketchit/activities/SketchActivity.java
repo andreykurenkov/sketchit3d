@@ -22,11 +22,13 @@ import edu.gatech.sketchit.shapes.Shape;
 import edu.gatech.sketchit.shapes.Triangle;
 import edu.gatech.sketchit.sketch.Finger;
 import edu.gatech.sketchit.sketch.Finger.finger_id;
+import edu.gatech.sketchit.sketch.HandState;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -39,7 +41,10 @@ import android.widget.RelativeLayout;
 public class SketchActivity extends Activity implements CvCameraViewListener2{
 	private GLSurfaceView mGLView;
 	private static HashMap<finger_id, Finger> detectors;
+	private static HandState rightHand, leftHand;
 	private CameraBridgeViewBase mOpenCvCameraView;
+
+
 	private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
 		public void onManagerConnected(int status) {
@@ -58,6 +63,12 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	};
 	public static void launch(Context by, HashMap<finger_id, Finger> hashMap){
 		SketchActivity.detectors=hashMap;
+		if(hashMap.containsKey(finger_id.Pointer_Left) && hashMap.containsKey(finger_id.Thumb_Left)){
+			Finger leftMiddle = hashMap.containsKey(finger_id.Middle_Left)?hashMap.get(finger_id.Middle_Left):null;
+			leftHand = new HandState(hashMap.get(finger_id.Pointer_Left),hashMap.get(finger_id.Thumb_Left),leftMiddle);
+			Finger rightMiddle = hashMap.containsKey(finger_id.Middle_Right)?hashMap.get(finger_id.Middle_Right):null;
+			rightHand = new HandState(hashMap.get(finger_id.Pointer_Right),hashMap.get(finger_id.Thumb_Right),rightMiddle);
+		}
 		by.startActivity(new Intent(by, SketchActivity.class));  
 	}
 
@@ -70,9 +81,10 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		//mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
 		//mOpenCvCameraView.setCvCameraViewListener(this);
 		mGLView = new AGLSurfaceView(this);
-		setContentView(mGLView);//,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
-	}
+		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 	
+	}
+
 
 	@Override
 	public void onPause()
@@ -105,7 +117,17 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	@Override
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		Mat mRgba = inputFrame.rgba();
-		return null;
+		if(leftHand!=null){
+			Point3 clicked = leftHand.updateClickedState(mRgba);
+		}
+		if(rightHand!=null){
+			Point3 clicked = rightHand.updateClickedState(mRgba);
+			if(clicked!=null){
+				long downTime = rightHand.getTimeOfDown();
+				//MotionEvent event = MotionEvent.obtain(downTime, eventTime, action, x, y, metaState)
+			}
+		}
+		return mRgba;
 	}
 }
 
@@ -124,9 +146,9 @@ class AGLSurfaceView extends GLSurfaceView {
 		mRenderer = new MyGLRenderer();
 		setRenderer(mRenderer);
 		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-		
+
 	}
-	
+
 	private void generate() {
 		System.out.println("rendering");
 //		Point3[] rand = Shape.randomShape(4);
@@ -160,14 +182,14 @@ class AGLSurfaceView extends GLSurfaceView {
 //			return true;
 		}
 
-        float x = e.getX();
-        float y = e.getY();
+		float x = e.getX();
+		float y = e.getY();
 
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_MOVE:
+		switch (e.getAction()) {
+		case MotionEvent.ACTION_MOVE:
 
-                float dx = x - mPreviousX;
-                float dy = y - mPreviousY;
+			float dx = x - mPreviousX;
+			float dy = y - mPreviousY;
 
                 mRenderer.mAngleX += (dx) * TOUCH_SCALE_FACTOR; 
                 mRenderer.mAngleY += (dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
@@ -175,8 +197,9 @@ class AGLSurfaceView extends GLSurfaceView {
 	            requestRender();
 	        }
 
-	        mPreviousX = x;
-	        mPreviousY = y;
-	        return true;
-	    }	   
+
+		mPreviousX = x;
+		mPreviousY = y;
+		return true;
+	}	   
 }

@@ -21,4 +21,9 @@ public class Circle extends Shape {
 		loadBuffer();
 		drawCode = GLES20.GL_TRIANGLE_FAN;
 	}
+	@Override
+	public boolean contains(Point3 hand) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

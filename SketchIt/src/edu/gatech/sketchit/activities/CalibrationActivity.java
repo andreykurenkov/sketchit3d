@@ -65,10 +65,10 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
         }
     };
 
-	private Finger.finger_id[] fingerOrder={finger_id.Middle_Left,
+	private Finger.finger_id[] fingerOrder={/*finger_id.Middle_Left,
 										finger_id.Pointer_Left,
 										finger_id.Thumb_Left, 
-										finger_id.Middle_Right,
+										finger_id.Middle_Right,*/
 										finger_id.Pointer_Right, 
 										finger_id.Thumb_Right};
 	private Finger[] fingers;

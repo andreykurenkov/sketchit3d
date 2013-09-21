@@ -9,4 +9,12 @@ public class Line extends Shape {
 		super(a, b);
 		drawCode = GLES20.GL_LINES;
 	}
+
+	@Override
+	public boolean contains(Point3 hand) {
+		if(inLine(vertices[0], vertices[1], hand))
+			return true;
+		return false;
+	}
+	
 }
