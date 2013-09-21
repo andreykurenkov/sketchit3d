@@ -12,9 +12,10 @@ import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.core.Mat;
 import org.opencv.core.Point3;
 
-import edu.gatech.sketchit.AGLRenderer;
+import edu.gatech.sketchit.MyGLRenderer;
 import edu.gatech.sketchit.R;
 import edu.gatech.sketchit.cv.ColorDetector;
+import edu.gatech.sketchit.shapes.Circle;
 import edu.gatech.sketchit.shapes.Line;
 import edu.gatech.sketchit.shapes.Rectangle;
 import edu.gatech.sketchit.shapes.Shape;
@@ -64,12 +65,12 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.gl_screen_view);
+		//setContentView(R.layout.gl_screen_view);
 
-		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
-		mOpenCvCameraView.setCvCameraViewListener(this);
+		//mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
+		//mOpenCvCameraView.setCvCameraViewListener(this);
 		mGLView = new AGLSurfaceView(this);
-		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+		setContentView(mGLView);//,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 	}
 	
 
@@ -85,7 +86,7 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	public void onResume()
 	{
 		super.onResume();
-		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
+		//OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
 	}
 
 	@Override
@@ -113,33 +114,50 @@ class AGLSurfaceView extends GLSurfaceView {
 	private float mPreviousX;
 	private float mPreviousY;
 	private float mPreviousZ;
-	private final AGLRenderer mRenderer;
+	private final MyGLRenderer mRenderer;
 	private boolean generated;
 
 	public AGLSurfaceView(Context context) {
 		super(context);
 		setEGLContextClientVersion(2);
 		super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-		mRenderer = new AGLRenderer();
+		mRenderer = new MyGLRenderer();
 		setRenderer(mRenderer);
 		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 		
 	}
 	
 	private void generate() {
-		for(int i=0;i<50;i++) {
-			Point3[] rand = Shape.randomShape(2);
-			Shape r = new Line(rand[0], rand[1]);
-			mRenderer.addShape(r);
-			requestRender();
-		}
+		System.out.println("rendering");
+//		Point3[] rand = Shape.randomShape(4);
+//		Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
+//		mRenderer.addShape(r);
+//		requestRender();
+
+//		for(int i=0;i<50;i++) {
+//			Point3[] rand = Shape.randomShape(2);
+//			Shape r = new Line(rand[0], rand[1]);
+//			mRenderer.addShape(r);
+//		}
+//		requestRender();
+//		for(int i=0;i<5;i++) {
+//			Point3[] rand = Shape.randomShape(4);
+//			Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
+//			mRenderer.addShape(r);
+//		}
+		Shape r = new Circle(new Point3(0, 0, 0), 20);
+		mRenderer.addShape(r);
+		requestRender();
+		
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
+		System.out.println("touched happening");
 		if(!generated) {
 			generated = true;
 			generate();
+//			return true;
 		}
 
         float x = e.getX();
@@ -151,17 +169,9 @@ class AGLSurfaceView extends GLSurfaceView {
                 float dx = x - mPreviousX;
                 float dy = y - mPreviousY;
 
-                // reverse direction of rotation above the mid-line
-                if (y > getHeight() / 2) {
-                  dx = dx * -1 ;
-                }
+                mRenderer.mAngleX += (dx) * TOUCH_SCALE_FACTOR; 
+                mRenderer.mAngleY += (dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 
-                // reverse direction of rotation to left of the mid-line
-                if (x < getWidth() / 2) {
-                  dy = dy * -1 ;
-                }
-
-                mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 	            requestRender();
 	        }
 
