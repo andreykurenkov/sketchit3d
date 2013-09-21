@@ -76,10 +76,10 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		//setContentView(R.layout.gl_screen_view);
+		setContentView(R.layout.gl_screen_view);
 
-		//mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
-		//mOpenCvCameraView.setCvCameraViewListener(this);
+		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
+		mOpenCvCameraView.setCvCameraViewListener(this);
 		mGLView = new AGLSurfaceView(this);
 		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 	
@@ -98,7 +98,7 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	public void onResume()
 	{
 		super.onResume();
-		//OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
+		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
 	}
 
 	@Override

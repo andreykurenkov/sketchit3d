@@ -13,6 +13,11 @@ public class Rectangle extends Shape {
 		super(a,b,c,c,d,a);
 		drawCode = GLES20.GL_TRIANGLES;
 	}
+	
+	public Rectangle(Point3 a, Point3 b, Point3 c, Point3 d, float[] color){
+		this(a,b,c,d);
+		this.color = color;
+	}
 
 	@Override
 	public boolean contains(Point3 hand) {

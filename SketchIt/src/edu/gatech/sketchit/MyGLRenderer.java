@@ -7,6 +7,9 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import org.opencv.core.Point3;
+
+import edu.gatech.sketchit.shapes.Cursor;
 import edu.gatech.sketchit.shapes.Line;
 import edu.gatech.sketchit.shapes.Shape;
 
@@ -40,20 +43,22 @@ public class MyGLRenderer implements Renderer {
 //	private final int mColorDataSize = 4;	
 	
 	private List<Shape> shapes = new ArrayList<Shape>();
+	private Shape cursor1;
+	private Shape cursor2;
 	
 	public float mAngleX;
 	public float mAngleY;
 	
-	private void draw(FloatBuffer vertexBuffer, FloatBuffer colorBuffer, int drawCode) {
-		vertexBuffer.position(mPositionOffset);
+	private void draw(Shape s) {
+		s.vertexBuffer.position(mPositionOffset);
         GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false,
-        		3, vertexBuffer);        
+        		3, s.vertexBuffer);        
                 
         GLES20.glEnableVertexAttribArray(mPositionHandle);        
         
         // Pass in the color information
         GLES20.glVertexAttribPointer(mColorHandle, 4, GLES20.GL_FLOAT, false,
-        		4, colorBuffer);        
+        		4, s.colorBuffer);        
         
         GLES20.glEnableVertexAttribArray(mColorHandle);
         
@@ -66,7 +71,7 @@ public class MyGLRenderer implements Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
 
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-        GLES20.glDrawArrays(drawCode, 0, 3);     
+        GLES20.glDrawArrays(s.drawCode, 0, 3);     
 	}
 	
 	@Override
@@ -79,7 +84,13 @@ public class MyGLRenderer implements Renderer {
         
         for(int i=0;i<shapes.size();i++) {
         	Shape s = shapes.get(i);
-        	draw(s.vertexBuffer, s.colorBuffer, s.drawCode);
+        	draw(s);
+        }
+        if(cursor1 != null) {
+        	draw(cursor1);
+        }
+        if(cursor2 != null) {
+        	draw(cursor2);
         }
 	}
 
@@ -258,5 +269,17 @@ public class MyGLRenderer implements Renderer {
 	public void removeShape(Shape s) {
 		shapes.remove(s);
 	}
-
+	
+	public void setCursor1(Point3 location) {
+		cursor1 = new Cursor(location);
+	}
+	public void setCursor2(Point3 location) {
+		cursor2 = new Cursor(location);
+	}
+	public void clearCursor1() {
+		cursor1 = null;
+	}
+	public void clearCursor2() {
+		cursor2 = null;
+	}
 }
