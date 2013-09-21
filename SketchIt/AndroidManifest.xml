@@ -20,10 +20,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:screenOrientation="landscape"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity
             android:name="edu.gatech.sketchit.MainMenu"
+            android:screenOrientation="landscape"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,10 +31,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.gatech.sketchit.activities.CalibrationActivity">
+            android:name="edu.gatech.sketchit.activities.CalibrationActivity"
+            android:screenOrientation="landscape">
         </activity>
  		 <activity
-            android:name="edu.gatech.sketchit.activities.SketchActivity">
+            android:name="edu.gatech.sketchit.activities.SketchActivity"
+            android:screenOrientation="landscape">
+        </activity>
+         		 <activity
+            android:name="edu.gatech.sketchit.activities.OpenGLActivity">
         </activity>
         
     </application>

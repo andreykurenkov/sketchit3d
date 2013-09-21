@@ -1,5 +1,7 @@
 package edu.gatech.sketchit.activities;
 
+import java.util.HashMap;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
@@ -16,21 +18,25 @@ import edu.gatech.sketchit.cv.ColorDetector;
 import edu.gatech.sketchit.shapes.Rectangle;
 import edu.gatech.sketchit.shapes.Shape;
 import edu.gatech.sketchit.shapes.Triangle;
+import edu.gatech.sketchit.sketch.Finger;
+import edu.gatech.sketchit.sketch.Finger.finger_id;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.LinearLayout;
-import android.widget.ViewFlipper;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{
-	private static ColorDetector[] detectors;
-
+	private static HashMap<finger_id, Finger> detectors;
 	private CameraBridgeViewBase mOpenCvCameraView;
-
 	private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
 		public void onManagerConnected(int status) {
@@ -47,25 +53,22 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 			}
 		}
 	};
-
-	public static void launch(Context by, ColorDetector[] detectors){
-		SketchActivity.detectors=detectors;
+	public static void launch(Context by, HashMap<finger_id, Finger> hashMap){
+		SketchActivity.detectors=hashMap;
 		by.startActivity(new Intent(by, SketchActivity.class));  
 	}
 
 	private GLSurfaceView mGLView;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.id.full_screen_view);
-		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.full_screen_view);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.gl_screen_view);
+
+		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
 		mOpenCvCameraView.setCvCameraViewListener(this);
-
-
-		mGLView = new MyGLSurfaceView(this);
-		setContentView(mGLView);
-
+		MyGLSurfaceView myGLView = new MyGLSurfaceView(this);
+		addContentView(myGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 	}
 
 	@Override
@@ -85,6 +88,7 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 
 	@Override
 	public void onCameraViewStarted(int width, int height) {
+
 		// TODO Auto-generated method stub
 
 	}
@@ -98,10 +102,6 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	@Override
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		Mat mRgba = inputFrame.rgba();
-		Log.i("bro","sup");
-		//for(ColorDetector detector:detectors){
-		//	Point3 point = detector.detectBiggestBlob(mRgba);
-		//}
 		return null;
 	}
 }
@@ -125,10 +125,12 @@ class MyGLSurfaceView extends GLSurfaceView {
 
 
 	@Override
-    public boolean onTouchEvent(MotionEvent e) {
-		Shape r = new Triangle(new Point3(0.0f, .6f, 0.0f),
-				new Point3(-0.5f, -0.3f, 0.0f),
-				new Point3(0.5f, -0.3f, 0.0f));
+	public boolean onTouchEvent(MotionEvent e) {
+		Shape r = new Triangle(new Point3(-.5f, .4f, 0f),
+				new Point3(-0.5f, -0.3f, 0f),
+				new Point3(0.5f, -0.7f, 0f));
+		//				new Point3(0.5f, 0.7f, 0));
+
 		mRenderer.addShape(r);
 //		mRenderer.update();
 		requestRender();

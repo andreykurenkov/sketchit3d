@@ -3,6 +3,9 @@ package edu.gatech.sketchit.shapes;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.Random;
+
+import org.opencv.core.Point3;
 
 import edu.gatech.sketchit.AGLRenderer;
 import android.opengl.GLES20;
@@ -29,7 +32,8 @@ public abstract class Shape {
     protected static final int vertexStride = COORDS_PER_VERTEX * 4;
     
     protected FloatBuffer vertexBuffer;
-	protected int mProgram;
+	protected static int mProgram = GLES20.glCreateProgram();             // create empty OpenGL ES Program
+    
     protected int mPositionHandle;
     protected int mColorHandle;
     protected int mMVPMatrixHandle;
@@ -38,11 +42,20 @@ public abstract class Shape {
 	protected float[] color = {0.0f, 0.0f, 0.0f, 1.0f};
     protected float[] coords;
     
-    public Shape() {
-    	mProgram = GLES20.glCreateProgram();             // create empty OpenGL ES Program
-	    GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
-	    GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
-	    GLES20.glLinkProgram(mProgram);
+    static {
+    	GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
+        GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
+        GLES20.glLinkProgram(mProgram);
+    }
+    
+    public Shape(Point3... vertices) {
+    	coords = new float[COORDS_PER_VERTEX*vertices.length];
+		for(int i=0;i<vertices.length;i++) {
+			coords[3*i] = (float)vertices[i].x;
+			coords[3*i+1] = (float)vertices[i].y;
+			coords[3*i+2] = (float)vertices[i].z;
+		}
+
     }
     
     /**
@@ -59,6 +72,8 @@ public abstract class Shape {
     }
     
     public void draw(float[] mvpMatrix) {
+    	setup();
+    	
 		GLES20.glUseProgram(mProgram);
 		
 		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
@@ -75,4 +90,17 @@ public abstract class Shape {
 
 		//sub class draws here
 	}
+    
+    public static Point3[] randomShape(int numVertices){
+    	Point3[] vertices = new Point3[numVertices];
+		Random rand = new Random();
+		for(int i=0;i<numVertices;i++) {
+			Point3 p = new Point3();
+			p.x = rand.nextFloat()*(rand.nextBoolean()?-1:1);
+			p.y = rand.nextFloat()*(rand.nextBoolean()?-1:1);
+			p.z = rand.nextFloat()*(rand.nextBoolean()?-1:1);
+			vertices[i] = p;
+		}
+		return vertices;
+    }
 }

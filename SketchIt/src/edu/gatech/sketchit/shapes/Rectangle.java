@@ -10,24 +10,15 @@ import android.opengl.GLES20;
 
 public class Rectangle extends Shape {
     private static final short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // order to draw vertices
-    private final ShortBuffer drawListBuffer;
+    private ShortBuffer drawListBuffer;
     
-    /**
-     * Pass in arguments counter-clockwise
-     * @param a Top Left
-     * @param b Bottom Left
-     * @param c Bottom Right
-     * @param d Top Right
-     */
+    
 	public Rectangle(Point3 a, Point3 b, Point3 c, Point3 d) {
-		coords = new float[12];
-		Point3[] vertices = {a,b,c,d};
-		for(int i=0;i<vertices.length;i++) {
-			coords[3*i] = (float)vertices[i].x;
-			coords[3*i+1] = (float)vertices[i].y;
-			coords[3*i+2] = (float)vertices[i].z;
-		}
-		setup();
+		super(a,b,c,d);
+	}
+
+	@Override
+	public void setup() {
 		ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
 		dlb.order(ByteOrder.nativeOrder());
 		drawListBuffer = dlb.asShortBuffer();

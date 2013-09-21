@@ -16,6 +16,7 @@ import edu.gatech.sketchit.shapes.Triangle;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
+import android.util.Log;
 
 public class AGLRenderer implements Renderer {
 	
@@ -77,4 +78,13 @@ public class AGLRenderer implements Renderer {
 	public boolean removeShape(Shape s) {
 		return shapes.remove(s);
 	}
+	
+	public static void checkGlError(String glOperation) {
+        int error;
+        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+            Log.e("AGLRenderer", glOperation + ": glError " + error);
+            throw new RuntimeException(glOperation + ": glError " + error);
+        }
+    }
+	
 }
