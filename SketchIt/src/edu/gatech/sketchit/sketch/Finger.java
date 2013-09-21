@@ -1,11 +1,12 @@
 package edu.gatech.sketchit.sketch;
 import java.util.HashMap;
 
+import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import edu.gatech.sketchit.cv.ColorDetector;
 
 public class Finger {
-	private static enum finger_id{Middle_Left,Pointer_Left, Thumb_Left, Middle_Right,Pointer_Right, Thumb_Right};
+	public static enum finger_id{Middle_Left,Pointer_Left, Thumb_Left, Middle_Right,Pointer_Right, Thumb_Right};
 	private static HashMap<finger_id,Finger> fingers = new HashMap<finger_id,Finger>();
 	//middle (left hand)","pointing (left hand)", "thumb (left hand)",
 	//"middle (right hand)","pointing (right hand)", "thumb (right hand)

@@ -1,5 +1,7 @@
 package edu.gatech.sketchit.activities;
 
+import java.util.HashMap;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
@@ -16,6 +18,8 @@ import edu.gatech.sketchit.cv.ColorDetector;
 import edu.gatech.sketchit.shapes.Rectangle;
 import edu.gatech.sketchit.shapes.Shape;
 import edu.gatech.sketchit.shapes.Triangle;
+import edu.gatech.sketchit.sketch.Finger;
+import edu.gatech.sketchit.sketch.Finger.finger_id;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +35,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{
-	private static ColorDetector[] detectors;
+	private static HashMap<finger_id, Finger> detectors;
 	private CameraBridgeViewBase mOpenCvCameraView;
 	private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
@@ -49,8 +53,8 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 			}
 		}
 	};
-	public static void launch(Context by, ColorDetector[] detectors){
-		SketchActivity.detectors=detectors;
+	public static void launch(Context by, HashMap<finger_id, Finger> hashMap){
+		SketchActivity.detectors=hashMap;
 		by.startActivity(new Intent(by, SketchActivity.class));  
 	}
 

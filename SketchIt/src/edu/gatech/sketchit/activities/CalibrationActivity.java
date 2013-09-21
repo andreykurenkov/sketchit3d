@@ -20,6 +20,8 @@ import org.opencv.imgproc.Imgproc;
 
 import edu.gatech.sketchit.R;
 import edu.gatech.sketchit.cv.ColorDetector;
+import edu.gatech.sketchit.sketch.Finger;
+import edu.gatech.sketchit.sketch.Finger.finger_id;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -63,10 +65,14 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
         }
     };
 
-	private String[] fingers={"middle (left hand)","pointing (left hand)", "thumb (left hand)",
-									"middle (right hand)","pointing (right hand)", "thumb (right hand)"};
-	private Mat[]                  spectrums;
-	private ColorDetector[] detectors;
+	private Finger.finger_id[] fingerOrder={finger_id.Middle_Left,
+										finger_id.Pointer_Left,
+										finger_id.Thumb_Left, 
+										finger_id.Middle_Right,
+										finger_id.Pointer_Right, 
+										finger_id.Thumb_Right};
+	private Finger[] fingers;
+	private Mat[] spectrums;
 	private int currentFinger;
 	
     public CalibrationActivity() {
@@ -114,8 +120,8 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC4);
-        spectrums= new Mat[fingers.length];
-        detectors = new ColorDetector[fingers.length];
+        spectrums= new Mat[fingerOrder.length];
+        fingers = new Finger[fingerOrder.length];
         SPECTRUM_SIZE = new Size(200, 64);
     }
 
@@ -127,7 +133,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
     	int cols = mRgba.cols();
         int rows = mRgba.rows();
         
-        if(currentFinger<fingers.length){
+        if(currentFinger<fingerOrder.length){
 	        Rect centerRect = new Rect(cols/2-25,rows/2-35,50,70);
 	        
 	        Mat centerRectRgba = mRgba.submat(centerRect);
@@ -157,15 +163,15 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
         Rect centerRect = new Rect(cols/2-25,rows/2-35,50,70);
 
         Core.rectangle(mRgba, centerRect.tl(), centerRect.br(), new Scalar(255, 255, 0), 2, 8, 0 );
-        if(currentFinger<fingers.length){
-	        Core.putText(mRgba, "Place "+fingers[currentFinger]+" finger in rectangle.", new Point(5,45), 0/*font*/, 1, new Scalar(255, 255, 255, 255), 3);
+        if(currentFinger<fingerOrder.length){
+	        Core.putText(mRgba, "Place your "+fingerOrder[currentFinger].name().replace("_", "(")+"hand) finger in rectangle.", new Point(5,45), 0/*font*/, 1, new Scalar(255, 255, 255, 255), 3);
 	        Core.putText(mRgba, "Touch anywhere to capture.",  new Point(5,rows-45), 0/*font*/, 1, new Scalar(255, 255, 255, 255), 3);
 	
 	        for(int i=0;i<currentFinger;i++){
 	        	//Magic offsets!
 		        Mat spectrumLabel = mRgba.submat(5+60*i, 5+60*i+ spectrums[i].rows(), cols-205, cols-205 + spectrums[i].cols());
 	        	spectrums[i].copyTo(spectrumLabel);
-		        Core.putText(mRgba, (i+1)+")"+fingers[i]+":", new Point(cols-540,45+60*i), 0/*font*/, 1, new Scalar(255, 255, 255, 125), 3);
+		        Core.putText(mRgba, (i+1)+")"+fingerOrder[i]+":", new Point(cols-540,45+60*i), 0/*font*/, 1, new Scalar(255, 255, 255, 125), 3);
 	        }
 	        
 	        if(touched && detector!=null){
@@ -180,10 +186,10 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	            }else{
 	            	bad = false;
 	            	spectrums[currentFinger] = new Mat();
-	            	detectors[currentFinger]=detector;
+	            	fingers[currentFinger]=new Finger(fingerOrder[currentFinger],centerColorHsv,detector);
 			        Imgproc.resize(detector.getSpectrum(), spectrums[currentFinger], SPECTRUM_SIZE);
 			        //TODO: more checking, see that blob in center
-	            	prefs.edit().putString(fingers[currentFinger], centerColorHsv.val[0]+" "+centerColorHsv.val[1]+" "+centerColorHsv.val[2]).apply();
+	            	prefs.edit().putString(fingerOrder[currentFinger].name(), centerColorHsv.val[0]+" "+centerColorHsv.val[1]+" "+centerColorHsv.val[2]).apply();
 	            	currentFinger++;
 	            	prefs.edit().putInt("current finger", currentFinger).apply();
 	            	Imgproc.drawContours(mRgba, detector.getContours(mRgba), -1, new Scalar(0,255,0));
@@ -195,7 +201,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	        }
         }else{
         	Core.putText(mRgba, "Done!", new Point(5,45), 0/*font*/, 1, new Scalar(255, 255, 255, 255), 3);
-        	SketchActivity.launch(this, detectors);
+        	SketchActivity.launch(this, Finger.getHashMap());
         	finish();
         }
 
