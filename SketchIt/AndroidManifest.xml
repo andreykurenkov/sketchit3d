@@ -38,9 +38,6 @@
             android:name="edu.gatech.sketchit.activities.SketchActivity"
             android:screenOrientation="landscape">
         </activity>
-         		 <activity
-            android:name="edu.gatech.sketchit.activities.OpenGLActivity">
-        </activity>
         
     </application>
 

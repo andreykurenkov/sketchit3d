@@ -2,7 +2,6 @@ package edu.gatech.sketchit;
 
 //import edu.gatech.sketchit.activities.CalibrationActivity;
 import edu.gatech.sketchit.activities.CalibrationActivity;
-import edu.gatech.sketchit.activities.OpenGLActivity;
 import edu.gatech.sketchit.activities.SketchActivity;
 import android.os.Bundle;
 import android.app.Activity;

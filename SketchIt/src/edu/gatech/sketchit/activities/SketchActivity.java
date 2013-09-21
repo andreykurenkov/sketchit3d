@@ -15,6 +15,7 @@ import org.opencv.core.Point3;
 import edu.gatech.sketchit.AGLRenderer;
 import edu.gatech.sketchit.R;
 import edu.gatech.sketchit.cv.ColorDetector;
+import edu.gatech.sketchit.shapes.Line;
 import edu.gatech.sketchit.shapes.Rectangle;
 import edu.gatech.sketchit.shapes.Shape;
 import edu.gatech.sketchit.shapes.Triangle;
@@ -35,6 +36,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{
+	private GLSurfaceView mGLView;
 	private static HashMap<finger_id, Finger> detectors;
 	private CameraBridgeViewBase mOpenCvCameraView;
 	private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
@@ -58,7 +60,6 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		by.startActivity(new Intent(by, SketchActivity.class));  
 	}
 
-	private GLSurfaceView mGLView;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,9 +68,10 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
 		mOpenCvCameraView.setCvCameraViewListener(this);
-		MyGLSurfaceView myGLView = new MyGLSurfaceView(this);
-		addContentView(myGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+		mGLView = new AGLSurfaceView(this);
+		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 	}
+	
 
 	@Override
 	public void onPause()
@@ -106,14 +108,15 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	}
 }
 
-class MyGLSurfaceView extends GLSurfaceView {
+class AGLSurfaceView extends GLSurfaceView {
 	private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
 	private float mPreviousX;
 	private float mPreviousY;
 	private float mPreviousZ;
 	private final AGLRenderer mRenderer;
+	private boolean generated;
 
-	public MyGLSurfaceView(Context context) {
+	public AGLSurfaceView(Context context) {
 		super(context);
 		setEGLContextClientVersion(2);
 		super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
@@ -122,48 +125,48 @@ class MyGLSurfaceView extends GLSurfaceView {
 		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 		
 	}
-
+	
+	private void generate() {
+		for(int i=0;i<50;i++) {
+			Point3[] rand = Shape.randomShape(2);
+			Shape r = new Line(rand[0], rand[1]);
+			mRenderer.addShape(r);
+			requestRender();
+		}
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
-		Shape r = new Triangle(new Point3(-.5f, .4f, 0f),
-				new Point3(-0.5f, -0.3f, 0f),
-				new Point3(0.5f, -0.7f, 0f));
-		//				new Point3(0.5f, 0.7f, 0));
+		if(!generated) {
+			generated = true;
+			generate();
+		}
 
-		mRenderer.addShape(r);
-//		mRenderer.update();
-		requestRender();
-			return true;
-        // MotionEvent reports input details from the touch screen
-        // and other input controls. In this case, you are only
-        // interested in events where the touch position changed.
+        float x = e.getX();
+        float y = e.getY();
 
-//        float x = e.getX();
-//        float y = e.getY();
-//
-//        switch (e.getAction()) {
-//            case MotionEvent.ACTION_MOVE:
-//
-//                float dx = x - mPreviousX;
-//                float dy = y - mPreviousY;
-//
-//                // reverse direction of rotation above the mid-line
-//                if (y > getHeight() / 2) {
-//                  dx = dx * -1 ;
-//                }
-//
-//                // reverse direction of rotation to left of the mid-line
-//                if (x < getWidth() / 2) {
-//                  dy = dy * -1 ;
-//                }
-//
-//                mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
-//	            requestRender();
-//	        }
-//
-//	        mPreviousX = x;
-//	        mPreviousY = y;
-//	        return true;
+        switch (e.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+
+                float dx = x - mPreviousX;
+                float dy = y - mPreviousY;
+
+                // reverse direction of rotation above the mid-line
+                if (y > getHeight() / 2) {
+                  dx = dx * -1 ;
+                }
+
+                // reverse direction of rotation to left of the mid-line
+                if (x < getWidth() / 2) {
+                  dy = dy * -1 ;
+                }
+
+                mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
+	            requestRender();
+	        }
+
+	        mPreviousX = x;
+	        mPreviousY = y;
+	        return true;
 	    }	   
 }
