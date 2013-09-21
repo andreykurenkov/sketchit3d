@@ -21,14 +21,18 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity
-            android:name="edu.gatech.sketchit.activities.CalibrationActivity"
+            android:name="edu.gatech.sketchit.Splash"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="edu.gatech.sketchit.activities.CalibrationActivity">
+        </activity>
+  
+        
     </application>
 
 </manifest>

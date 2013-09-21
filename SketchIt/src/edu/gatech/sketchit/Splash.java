@@ -1,7 +1,9 @@
 package edu.gatech.sketchit;
 
+import edu.gatech.sketchit.activities.CalibrationActivity;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -91,14 +93,15 @@ public class Splash extends Activity {
         //OnClickListeners
         home_logo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO: logo onclicklistener
             	Log.d("SPLASH.java", "Logo Clicked");
             }
         });
         home_new.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO: home_new onclicklistener
             	Log.d("SPLASH.java", "New Clicked");
+            	//Intent intent = new Intent(Splash.this, SketchActivity.class);
+                //startActivity(intent);      
+                //finish();
             }
         });
         home_open.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +112,10 @@ public class Splash extends Activity {
         });
         home_calibrate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO: home_calibrate onclicklistener
             	Log.d("SPLASH.java", "Calibrate Clicked");
+            	Intent intent = new Intent(Splash.this, CalibrationActivity.class);
+                startActivity(intent);      
+                finish();
             }
         });
         home_settings.setOnClickListener(new View.OnClickListener() {
