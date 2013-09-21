@@ -62,8 +62,8 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		mOpenCvCameraView.setCvCameraViewListener(this);
 
 
-		mGLView = new MyGLSurfaceView(this);
-		setContentView(mGLView);
+		//mGLView = new MyGLSurfaceView(this);
+		//setContentView(mGLView);
 
 	}
 
