@@ -17,16 +17,29 @@ public class Triangle extends Shape {
 		coords = new float[9];
 		Point3[] vertices = {a,b,c};
 		for(int i=0;i<vertices.length;i++) {
-			coords[i] = (float)vertices[i].x;
-			coords[i+1] = (float)vertices[i].y;
-			coords[i+2] = (float)vertices[i].z;
+			coords[3*i] = (float)vertices[i].x;
+			coords[3*i+1] = (float)vertices[i].y;
+			coords[3*i+2] = (float)vertices[i].z;
 		}
 		setup();
 	}
 	
 	@Override
 	public void draw(float[] mvpMatrix) {
-		super.draw(mvpMatrix);
+//		super.draw(mvpMatrix);
+		GLES20.glUseProgram(mProgram);
+		
+		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
+		GLES20.glEnableVertexAttribArray(mPositionHandle);
+		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
+                GLES20.GL_FLOAT, false,
+                vertexStride, vertexBuffer);
+		
+		mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
+		GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+
+		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
+		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
 		// Disable vertex array
 		GLES20.glDisableVertexAttribArray(mPositionHandle);

@@ -38,20 +38,19 @@ class MyGLSurfaceView extends GLSurfaceView {
 		mRenderer = new AGLRenderer();
 		setRenderer(mRenderer);
 		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+		
 	}
 	
 	
 	@Override
     public boolean onTouchEvent(MotionEvent e) {
-		System.out.println("Creating a new rectangle...");
-		Shape r = new Triangle(new Point3(-.5f, .4f, 0f),
-				new Point3(-0.5f, -0.3f, 0f),
-				new Point3(0.5f, -0.7f, 0f));
-//				new Point3(0.5f, 0.7f, 0));
-		
+		Shape r = new Triangle(new Point3(0.0f, .6f, 0.0f),
+				new Point3(-0.5f, -0.3f, 0.0f),
+				new Point3(0.5f, -0.3f, 0.0f));
 		mRenderer.addShape(r);
-		mRenderer.update();
-		return true;
+//		mRenderer.update();
+		requestRender();
+			return true;
         // MotionEvent reports input details from the touch screen
         // and other input controls. In this case, you are only
         // interested in events where the touch position changed.

@@ -1,12 +1,17 @@
 package edu.gatech.sketchit;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import org.opencv.core.Point3;
+
+import edu.gatech.sketchit.shapes.Rectangle;
 import edu.gatech.sketchit.shapes.Shape;
+import edu.gatech.sketchit.shapes.Triangle;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
@@ -14,7 +19,7 @@ import android.opengl.Matrix;
 
 public class AGLRenderer implements Renderer {
 	
-	private List<Shape> shapes;
+	private List<Shape> shapes = new ArrayList<Shape>();
 	
 	private final float[] mMVPMatrix = new float[16];
     private final float[] mProjMatrix = new float[16];
@@ -22,9 +27,8 @@ public class AGLRenderer implements Renderer {
     private final float[] mRotationMatrix = new float[16];
     
     // Declare as volatile because we are updating it from another thread
-    public volatile float mAngle;
-    
-    
+    public volatile float mAngle = 0;
+        
 	@Override
 	public void onDrawFrame(GL10 unused) {
 		
@@ -36,9 +40,8 @@ public class AGLRenderer implements Renderer {
 
 		//draw shapes here
 //		myTriangle.draw(mMVPMatrix);
-		System.out.println("Drawing...");
-		for(Shape shape : shapes) {
-			shape.draw(mMVPMatrix);
+		for(int i=0;i<shapes.size();i++) {
+			shapes.get(i).draw(mMVPMatrix);
 		}
 	}
 
@@ -52,8 +55,11 @@ public class AGLRenderer implements Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		
-		shapes = new ArrayList<Shape>();
+		Shape r = new Rectangle(new Point3(-0.5f, .6f, 0.0f),
+				new Point3(-0.5f, -0.6f, 0.0f),
+				new Point3(0.5f, -0.6f, 0.0f),
+				new Point3(0.5f, .6f, 0.0f));
+//		shapes.add(r);
 	}
 	
 	public static int loadShader(int type, String shaderCode){
@@ -70,8 +76,5 @@ public class AGLRenderer implements Renderer {
 	}
 	public boolean removeShape(Shape s) {
 		return shapes.remove(s);
-	}
-	public void update() {
-		onDrawFrame(null);
 	}
 }

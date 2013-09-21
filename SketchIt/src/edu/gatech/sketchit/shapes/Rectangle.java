@@ -23,9 +23,9 @@ public class Rectangle extends Shape {
 		coords = new float[12];
 		Point3[] vertices = {a,b,c,d};
 		for(int i=0;i<vertices.length;i++) {
-			coords[i] = (float)vertices[i].x;
-			coords[i+1] = (float)vertices[i].y;
-			coords[i+2] = (float)vertices[i].z;
+			coords[3*i] = (float)vertices[i].x;
+			coords[3*i+1] = (float)vertices[i].y;
+			coords[3*i+2] = (float)vertices[i].z;
 		}
 		setup();
 		ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
