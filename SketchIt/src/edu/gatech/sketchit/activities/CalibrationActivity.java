@@ -66,6 +66,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	private String[] fingers={"middle (left hand)","pointing (left hand)", "thumb (left hand)",
 									"middle (right hand)","pointing (right hand)", "thumb (right hand)"};
 	private Mat[]                  spectrums;
+	private ColorDetector[] detectors;
 	private int currentFinger;
 	
     public CalibrationActivity() {
@@ -114,6 +115,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC4);
         spectrums= new Mat[fingers.length];
+        detectors = new ColorDetector[fingers.length];
         SPECTRUM_SIZE = new Size(200, 64);
     }
 
@@ -178,6 +180,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	            }else{
 	            	bad = false;
 	            	spectrums[currentFinger] = new Mat();
+	            	detectors[currentFinger]=detector;
 			        Imgproc.resize(detector.getSpectrum(), spectrums[currentFinger], SPECTRUM_SIZE);
 			        //TODO: more checking, see that blob in center
 	            	prefs.edit().putString(fingers[currentFinger], centerColorHsv.val[0]+" "+centerColorHsv.val[1]+" "+centerColorHsv.val[2]).apply();
@@ -192,6 +195,8 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	        }
         }else{
         	Core.putText(mRgba, "Done!", new Point(5,45), 0/*font*/, 1, new Scalar(255, 255, 255, 255), 3);
+        	SketchActivity.launch(this, detectors);
+        	finish();
         }
 
         return mRgba;
