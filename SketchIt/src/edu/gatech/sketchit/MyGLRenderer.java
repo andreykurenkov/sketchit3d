@@ -75,7 +75,10 @@ public class MyGLRenderer implements Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
 
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-        GLES20.glDrawArrays(s.drawCode, s.drawCode == GLES20.GL_LINE_LOOP ? 2 : 0, s.drawCode == GLES20.GL_TRIANGLE_FAN? 30 : s.drawCode == GLES20.GL_LINE_LOOP ? 29 : 3);     
+        
+//        GLES20.glVertexAttribPointer(0, 3, GLES20.GL_FLOAT, false, 3, ptr)
+//        GLES20.glDrawElements(GLES20.GL_TRIANGLE_FAN, count, type, indices)
+        GLES20.glDrawArrays(s.drawCode, s.drawCode == GLES20.GL_LINE_LOOP ? 2 : 0, s.drawCode == GLES20.GL_TRIANGLE_FAN? 8 : s.drawCode == GLES20.GL_LINE_LOOP ? 29 : 3);     
 	}
 	
 	@Override
@@ -280,11 +283,13 @@ public class MyGLRenderer implements Renderer {
 		location.x = location.x / lastWidth;
 		location.y = location.y / lastHeight;
 		cursor1 = new Cursor(location);
+		this.onDrawFrame(null);
 	}
 	public void setCursor2(Point3 location) {
 		location.x = location.x / lastWidth;
 		location.y = location.y / lastHeight;
 		cursor2 = new Cursor(location);
+		this.onDrawFrame(null);
 	}
 	public void clearCursor1() {
 		cursor1 = null;
