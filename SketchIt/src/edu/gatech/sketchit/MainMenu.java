@@ -95,12 +95,12 @@ public class MainMenu extends Activity {
         //OnClickListeners
         home_logo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	Log.d("SPLASH.java", "Logo Clicked");
+            	Log.d("MainMenu.java", "Logo Clicked");
             }
         });
         home_new.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	Log.d("SPLASH.java", "New Clicked");
+            	Log.d("MainMenu.java", "New Clicked");
             	Intent intent = new Intent(MainMenu.this, SketchActivity.class);
                 startActivity(intent);      
             }
@@ -108,21 +108,20 @@ public class MainMenu extends Activity {
         home_open.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: home_open onclicklistener
-            	Log.d("SPLASH.java", "Open Clicked");
+            	Log.d("MainMenu.java", "Open Clicked");
             }
         });
         home_calibrate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	Log.d("SPLASH.java", "Calibrate Clicked");
+            	Log.d("MainMenu.java", "Calibrate Clicked");
             	Intent intent = new Intent(MainMenu.this, CalibrationActivity.class);
                 startActivity(intent);      
-                finish();
             }
         });
         home_settings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: home_settings onclicklistener
-            	Log.d("SPLASH.java", "Settings Clicked");
+            	Log.d("MainMenu.java", "Settings Clicked");
             }
         });
         
