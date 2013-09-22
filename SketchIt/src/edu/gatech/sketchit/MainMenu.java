@@ -1,22 +1,20 @@
 package edu.gatech.sketchit;
 
 //import edu.gatech.sketchit.activities.CalibrationActivity;
+
 import edu.gatech.sketchit.activities.CalibrationActivity;
-import edu.gatech.sketchit.activities.SketchActivity;
 import edu.gatech.sketchit.activities.SketchActivityJCPT;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class MainMenu extends Activity {
 	    
@@ -30,7 +28,7 @@ public class MainMenu extends Activity {
         ImageButton home_calibrate = new ImageButton(this);
         ImageButton home_settings = new ImageButton(this);
         //Variablize images
-        Bitmap img_logo = BitmapFactory.decodeResource(getResources(), R.drawable.generic_logo);
+        Bitmap img_logo = BitmapFactory.decodeResource(getResources(), R.drawable.logo_big);
         Bitmap img_new = BitmapFactory.decodeResource(getResources(), R.drawable.home_new);
         Bitmap img_open = BitmapFactory.decodeResource(getResources(), R.drawable.home_open);
         Bitmap img_calibrate = BitmapFactory.decodeResource(getResources(), R.drawable.home_calibrate);
