@@ -30,10 +30,10 @@ public class MainMenu extends Activity {
         ImageButton home_settings = new ImageButton(this);
         //Variablize images
         Bitmap img_logo = BitmapFactory.decodeResource(getResources(), R.drawable.generic_logo);
-        Bitmap img_new = BitmapFactory.decodeResource(getResources(), R.drawable.generic_button);
-        Bitmap img_open = BitmapFactory.decodeResource(getResources(), R.drawable.generic_button);
-        Bitmap img_calibrate = BitmapFactory.decodeResource(getResources(), R.drawable.generic_button);
-        Bitmap img_settings = BitmapFactory.decodeResource(getResources(), R.drawable.generic_button);
+        Bitmap img_new = BitmapFactory.decodeResource(getResources(), R.drawable.home_new);
+        Bitmap img_open = BitmapFactory.decodeResource(getResources(), R.drawable.home_open);
+        Bitmap img_calibrate = BitmapFactory.decodeResource(getResources(), R.drawable.home_calibrate);
+        Bitmap img_settings = BitmapFactory.decodeResource(getResources(), R.drawable.home_settings);
         //Set and Id Objects
         home_logo.setImageBitmap(img_logo);
         home_logo.setId(99);
