@@ -39,7 +39,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{
-	private GLSurfaceView mGLView;
+	private MyGLSurfaceView mGLView;
 	private static HashMap<finger_id, Finger> detectors;
 	private static HandState rightHand, leftHand;
 	private CameraBridgeViewBase mOpenCvCameraView;
@@ -122,6 +122,8 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		}
 		if(rightHand!=null){
 			Point3 clicked = rightHand.updateClickedState(mRgba);
+			Point3 cursor = rightHand.getPointing().getColorDetector().detectBiggestBlob(mRgba);
+			mGLView.getRenderer().setCursor1(cursor);
 			if(clicked!=null){
 				long downTime = rightHand.getTimeOfDown();
 				//MotionEvent event = MotionEvent.obtain(downTime, eventTime, action, x, y, metaState)
@@ -130,6 +132,7 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		return mRgba;
 	}
 }
+
 
 class MyGLSurfaceView extends GLSurfaceView {
 	private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
@@ -155,7 +158,6 @@ class MyGLSurfaceView extends GLSurfaceView {
 	}
 	
 	private void generate() {
-		System.out.println("rendering");
 //		Point3[] rand = Shape.randomShape(4);
 //		Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
 //		mRenderer.addShape(r);
@@ -175,7 +177,6 @@ class MyGLSurfaceView extends GLSurfaceView {
 		Shape r = new Circle(new Point3(0, 0, 0), 20);
 		mRenderer.addShape(r);
 		requestRender();
-		
 	}
 
 	@Override
@@ -210,5 +211,9 @@ class MyGLSurfaceView extends GLSurfaceView {
 		mPreviousX = x;
 		mPreviousY = y;
 		return true;
-	}	   
+	}	
+	
+	public MyGLRenderer getRenderer(){
+		return mRenderer;
+	}
 }

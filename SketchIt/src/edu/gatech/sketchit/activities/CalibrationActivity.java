@@ -134,7 +134,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
         int rows = mRgba.rows();
         
         if(currentFinger<fingerOrder.length){
-	        Rect centerRect = new Rect(cols/2-25,rows/2-35,50,70);
+	        Rect centerRect = new Rect(cols/2-35,rows/2-45,70,90);
 	        
 	        Mat centerRectRgba = mRgba.submat(centerRect);
 	        Mat centerRectHsv = new Mat();
@@ -160,18 +160,21 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
         int cols = mRgba.cols();
         int rows = mRgba.rows();
 
-        Rect centerRect = new Rect(cols/2-25,rows/2-35,50,70);
+        Rect centerRect = new Rect(cols/2-35,rows/2-45,70,90);
 
         Core.rectangle(mRgba, centerRect.tl(), centerRect.br(), new Scalar(255, 255, 0), 2, 8, 0 );
         if(currentFinger<fingerOrder.length){
-	        Core.putText(mRgba, "Place your "+fingerOrder[currentFinger].name().replace("_", "(")+"hand) finger in rectangle.", new Point(5,45), 0/*font*/, 1, new Scalar(255, 255, 255, 255), 3);
+        	String fingerStr = fingerOrder[currentFinger].name().replace("_", "(").toLowerCase();
+	        Core.putText(mRgba, "Place your "+fingerStr+
+	        		" hand) finger in rectangle.", new Point(5,45), 0/*font*/, 1, new Scalar(255, 255, 255, 255), 3);
 	        Core.putText(mRgba, "Touch anywhere to capture.",  new Point(5,rows-45), 0/*font*/, 1, new Scalar(255, 255, 255, 255), 3);
 	
 	        for(int i=0;i<currentFinger;i++){
 	        	//Magic offsets!
 		        Mat spectrumLabel = mRgba.submat(5+60*i, 5+60*i+ spectrums[i].rows(), cols-205, cols-205 + spectrums[i].cols());
 	        	spectrums[i].copyTo(spectrumLabel);
-		        Core.putText(mRgba, (i+1)+")"+fingerOrder[i]+":", new Point(cols-540,45+60*i), 0/*font*/, 1, new Scalar(255, 255, 255, 125), 3);
+		        Core.putText(mRgba, (i+1)+")"+fingerStr+":", new Point(cols-450,45+60*i), 0/*font*/, 1, new Scalar(255, 255, 255, 125), 3);
+		        Imgproc.drawContours(mRgba, detector.getContours(mRgba), -1, new Scalar(0,255,0));
 	        }
 	        
 	        if(touched && detector!=null){
@@ -180,7 +183,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	            for(MatOfPoint contour: contours){
 	            	area += Imgproc.contourArea(contour);
 	            }
-	            if(area>10000 || area<1500){
+	            if(area>10000 || area<500){
 	            	bad = true;
 	            	Imgproc.drawContours(mRgba, detector.getContours(mRgba), -1, new Scalar(255,0,0,255));
 	            }else{
@@ -192,7 +195,6 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	            	prefs.edit().putString(fingerOrder[currentFinger].name(), centerColorHsv.val[0]+" "+centerColorHsv.val[1]+" "+centerColorHsv.val[2]).apply();
 	            	currentFinger++;
 	            	prefs.edit().putInt("current finger", currentFinger).apply();
-	            	Imgproc.drawContours(mRgba, detector.getContours(mRgba), -1, new Scalar(0,255,0));
 	            }
 	            touched = false;
 	        }
