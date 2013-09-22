@@ -73,8 +73,8 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.gl_screen_view);
 
-//		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
-//		mOpenCvCameraView.setCvCameraViewListener(this);
+		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
+		mOpenCvCameraView.setCvCameraViewListener(this);
 		mGLView = new MyGLSurfaceView(this);
 		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 
@@ -92,15 +92,15 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	public void onPause()
 	{
 		super.onPause();
-//		if (mOpenCvCameraView != null)
-//			mOpenCvCameraView.disableView();
+		if (mOpenCvCameraView != null)
+			mOpenCvCameraView.disableView();
 	}
 
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-//		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
+		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
 	}
 
 	@Override
@@ -126,10 +126,11 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 			Point3 clicked = rightHand.updateClickedState(mRgba);
 			Point3 cursor = rightHand.getPointing().getColorDetector().detectBiggestBlob(mRgba);
 			Point3 cursor2 = rightHand.getThumb().getColorDetector().detectBiggestBlob(mRgba);
-			System.out.println(cursor+" "+cursor2);
+			//Log.i("sketch",cursor+" "+cursor2);
 			if(cursor!=null){
 				//Log.i("Sketch",cursor.toString());
 				mGLView.getRenderer().setCursor1(cursor);
+				mGLView.getRenderer().setCursor2(cursor2);
 				if(clicked!=null){
 					Log.i("CLICK",clicked.toString());
 					long downTime = rightHand.getTimeOfDown();
@@ -182,14 +183,13 @@ class MyGLSurfaceView extends GLSurfaceView {
 //			Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
 //			mRenderer.addShape(r);
 //		}
-		Shape r = new Circle(new Point3(0, 0, 0), 2f);
+		Shape r = new Circle(new Point3(0, 0, 0), 3f);
 		mRenderer.addShape(r);
 		requestRender();
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
-		System.out.println("touched happening");
 		if(!generated) {
 			generated = true;
 			generate();
