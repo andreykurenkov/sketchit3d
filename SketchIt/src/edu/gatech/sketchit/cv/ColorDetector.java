@@ -2,7 +2,6 @@ package edu.gatech.sketchit.cv;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;

@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.JavaCameraView;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
@@ -17,10 +16,7 @@ import edu.gatech.sketchit.MyGLRenderer;
 import edu.gatech.sketchit.R;
 import edu.gatech.sketchit.cv.ColorDetector;
 import edu.gatech.sketchit.shapes.Circle;
-import edu.gatech.sketchit.shapes.Line;
-import edu.gatech.sketchit.shapes.Rectangle;
-import edu.gatech.sketchit.shapes.Shape;
-import edu.gatech.sketchit.shapes.Triangle;
+import edu.gatech.sketchit.shapes.*;
 import edu.gatech.sketchit.sketch.Finger;
 import edu.gatech.sketchit.sketch.Finger.finger_id;
 import edu.gatech.sketchit.sketch.HandState;
@@ -29,15 +25,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{

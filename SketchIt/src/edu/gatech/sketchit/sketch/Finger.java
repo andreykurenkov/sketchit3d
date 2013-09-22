@@ -1,7 +1,6 @@
 package edu.gatech.sketchit.sketch;
-import java.util.HashMap;
 
-import org.opencv.core.Mat;
+import java.util.HashMap;
 import org.opencv.core.Scalar;
 import edu.gatech.sketchit.cv.ColorDetector;
 

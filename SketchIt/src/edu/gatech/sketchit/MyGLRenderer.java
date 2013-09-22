@@ -1,17 +1,12 @@
 package edu.gatech.sketchit;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
 import org.opencv.core.Point3;
-
-import edu.gatech.sketchit.shapes.Cursor;
-import edu.gatech.sketchit.shapes.Line;
-import edu.gatech.sketchit.shapes.Shape;
+import edu.gatech.sketchit.shapes.*;
 
 
 import android.opengl.GLES20;
