@@ -156,6 +156,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
+		System.out.println(mRgba.cols()+" "+mRgba.rows()+" "+mRgba);
 
         int cols = mRgba.cols();
         int rows = mRgba.rows();
@@ -173,7 +174,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	        	//Magic offsets!
 		        Mat spectrumLabel = mRgba.submat(5+60*i, 5+60*i+ spectrums[i].rows(), cols-205, cols-205 + spectrums[i].cols());
 	        	spectrums[i].copyTo(spectrumLabel);
-		        Core.putText(mRgba, (i+1)+")"+fingerStr+":", new Point(cols-450,45+60*i), 0/*font*/, 1, new Scalar(255, 255, 255, 125), 3);
+		        Core.putText(mRgba, (i+1)+")"+fingerStr+"):", new Point(cols-450,45+60*i), 0/*font*/, 1, new Scalar(255, 255, 255, 125), 3);
 		        Imgproc.drawContours(mRgba, detector.getContours(mRgba), -1, new Scalar(0,255,0));
 	        }
 	        
@@ -183,7 +184,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	            for(MatOfPoint contour: contours){
 	            	area += Imgproc.contourArea(contour);
 	            }
-	            if(area>10000 || area<500){
+	            if(area>25000 || area<500){
 	            	bad = true;
 	            	Imgproc.drawContours(mRgba, detector.getContours(mRgba), -1, new Scalar(255,0,0,255));
 	            }else{

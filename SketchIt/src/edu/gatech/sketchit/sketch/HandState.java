@@ -26,8 +26,12 @@ public class HandState {
 	}
 	
 	public Point3 isLeftClick(Mat img){
+		if(pointing==null || thumb==null)
+			return null;
 		Point3 pointingPoint = pointing.getColorDetector().detectBiggestBlob(img);
 		Point3 thumbPoint = thumb.getColorDetector().detectBiggestBlob(img);
+		if(pointingPoint==null || thumbPoint==null)
+			return null;
 		Point3 diffPoint = new Point3( pointingPoint.x - thumbPoint.x,
 									   pointingPoint.y - thumbPoint.y,
 									   pointingPoint.z - thumbPoint.z);

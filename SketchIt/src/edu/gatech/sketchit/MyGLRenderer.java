@@ -1,17 +1,12 @@
 package edu.gatech.sketchit;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
 import org.opencv.core.Point3;
-
-import edu.gatech.sketchit.shapes.Cursor;
-import edu.gatech.sketchit.shapes.Line;
-import edu.gatech.sketchit.shapes.Shape;
+import edu.gatech.sketchit.shapes.*;
 
 
 import android.opengl.GLES20;
@@ -282,9 +277,13 @@ public class MyGLRenderer implements Renderer {
 	}
 	
 	public void setCursor1(Point3 location) {
+		location.x = location.x / lastWidth;
+		location.y = location.y / lastHeight;
 		cursor1 = new Cursor(location);
 	}
 	public void setCursor2(Point3 location) {
+		location.x = location.x / lastWidth;
+		location.y = location.y / lastHeight;
 		cursor2 = new Cursor(location);
 	}
 	public void clearCursor1() {
