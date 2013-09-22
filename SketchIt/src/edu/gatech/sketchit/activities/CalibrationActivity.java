@@ -183,7 +183,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	            for(MatOfPoint contour: contours){
 	            	area += Imgproc.contourArea(contour);
 	            }
-	            if(area>25000 || area<500){
+	            if(area>40000 || area<100){
 	            	bad = true;
 	            	Imgproc.drawContours(mRgba, detector.getContours(mRgba), -1, new Scalar(255,0,0,255));
 	            }else{

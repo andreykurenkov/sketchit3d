@@ -38,7 +38,7 @@ public class ColorDetector {
 	}
 
 	public ColorDetector(double originalArea, Scalar hsvColor){
-		this(originalArea, hsvColor,new Scalar(15,15,25));
+		this(originalArea, hsvColor,new Scalar(30,30,35));
 	}
 
 	public ColorDetector(double originalArea, Scalar hsvColor, Scalar colorRadius){
@@ -150,8 +150,8 @@ public class ColorDetector {
 		double avrArea = 0;
 		for(int i=0;i<AREA_AVR_LEN;i++)
 			avrArea+=areaAverage[i];
-		avrArea/=AREA_AVR_LEN;
-		return new Point3((tl.x + br.x)/2,(tl.y + br.y)/2,avrArea/originalArea);
+		avrArea/=AREA_AVR_LEN;//Todo
+		return new Point3((tl.x + br.x)/2,(tl.y + br.y)/2,rect.area()/originalArea);
 	}
 
 	public static double getCountourArea(MatOfPoint contour){
