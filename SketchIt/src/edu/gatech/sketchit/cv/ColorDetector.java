@@ -35,7 +35,7 @@ public class ColorDetector {
 	}
 
 	public ColorDetector(double originalArea, Scalar hsvColor){
-		this(originalArea, hsvColor,new Scalar(15,30,25,0));
+		this(originalArea, hsvColor,new Scalar(25,25,35));
 	}
 
 	public ColorDetector(double originalArea, Scalar hsvColor, Scalar colorRadius){
@@ -75,6 +75,16 @@ public class ColorDetector {
 		return this.getContours(rgbaImage,0.2);
 	}
 	
+	public Point3 detectBiggestBlob(Mat image){
+		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+		Mat hierarchy = new Mat();
+		MatOfPoint biggest = getBiggestContour(image);
+		if(biggest==null)
+			return null;
+		Rect boundRect = Imgproc.boundingRect(biggest);
+		return getPoint3(boundRect);
+	}
+	
 	public List<MatOfPoint> getContours(Mat rgbaImage,double minContourArea ) {
 		Imgproc.pyrDown(rgbaImage, mPyrDownMat);
 		Imgproc.pyrDown(mPyrDownMat, mPyrDownMat);
@@ -105,17 +115,6 @@ public class ColorDetector {
 			}
 		}
 		return toReturn;
-	}
-
-	public Point3 detectBiggestBlob(Mat image){
-		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-		Mat hierarchy = new Mat();
-
-		Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-
-		MatOfPoint biggest = getBiggestContour(contours);
-		Rect boundRect = Imgproc.boundingRect(biggest);
-		return getPoint3(boundRect);
 	}
 	
 	public static MatOfPoint getBiggestContour(List<MatOfPoint> contours){
