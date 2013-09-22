@@ -179,14 +179,13 @@ class MyGLSurfaceView extends GLSurfaceView {
 //			Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
 //			mRenderer.addShape(r);
 //		}
-		Shape r = new Circle(new Point3(0, 0, 0), 2f);
+		Shape r = new Circle(new Point3(0, 0, 0), 3f);
 		mRenderer.addShape(r);
 		requestRender();
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
-		System.out.println("touched happening");
 		if(!generated) {
 			generated = true;
 			generate();
