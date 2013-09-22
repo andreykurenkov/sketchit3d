@@ -39,7 +39,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{
-	private GLSurfaceView mGLView;
+	private myGLSurfaceView mGLView;
 	private static HashMap<finger_id, Finger> detectors;
 	private static HandState rightHand, leftHand;
 	private CameraBridgeViewBase mOpenCvCameraView;
@@ -80,7 +80,7 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
 		mOpenCvCameraView.setCvCameraViewListener(this);
-		mGLView = new AGLSurfaceView(this);
+		mGLView = new myGLSurfaceView(this);
 		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 	
 	}
@@ -122,6 +122,8 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		}
 		if(rightHand!=null){
 			Point3 clicked = rightHand.updateClickedState(mRgba);
+			Point3 cursor = rightHand.getPointing().getColorDetector().detectBiggestBlob(mRgba);
+			mGLView.getRenderer().setCursor1(cursor);
 			if(clicked!=null){
 				long downTime = rightHand.getTimeOfDown();
 				//MotionEvent event = MotionEvent.obtain(downTime, eventTime, action, x, y, metaState)
@@ -131,7 +133,7 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	}
 }
 
-class AGLSurfaceView extends GLSurfaceView {
+class myGLSurfaceView extends GLSurfaceView {
 	private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
 	private float mPreviousX;
 	private float mPreviousY;
@@ -139,7 +141,7 @@ class AGLSurfaceView extends GLSurfaceView {
 	private final MyGLRenderer mRenderer;
 	private boolean generated;
 
-	public AGLSurfaceView(Context context) {
+	public myGLSurfaceView(Context context) {
 		super(context);
 		setEGLContextClientVersion(2);
 		super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
@@ -150,7 +152,6 @@ class AGLSurfaceView extends GLSurfaceView {
 	}
 
 	private void generate() {
-		System.out.println("rendering");
 //		Point3[] rand = Shape.randomShape(4);
 //		Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
 //		mRenderer.addShape(r);
@@ -170,7 +171,6 @@ class AGLSurfaceView extends GLSurfaceView {
 		Shape r = new Circle(new Point3(0, 0, 0), 20);
 		mRenderer.addShape(r);
 		requestRender();
-		
 	}
 
 	@Override
@@ -201,5 +201,9 @@ class AGLSurfaceView extends GLSurfaceView {
 		mPreviousX = x;
 		mPreviousY = y;
 		return true;
-	}	   
+	}	
+	
+	public MyGLRenderer getRenderer(){
+		return mRenderer;
+	}
 }

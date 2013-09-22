@@ -8,10 +8,6 @@ import java.util.Random;
 import org.opencv.core.Point3;
 
 import edu.gatech.sketchit.MyGLRenderer;
-
-
-
-
 import android.opengl.GLES20;
 
 
