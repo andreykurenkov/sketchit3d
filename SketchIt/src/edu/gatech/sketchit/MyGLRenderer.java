@@ -80,7 +80,7 @@ public class MyGLRenderer implements Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
 
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-        GLES20.glDrawArrays(s.drawCode, 0, 3);     
+        GLES20.glDrawArrays(s.drawCode, s.drawCode == GLES20.GL_LINE_LOOP ? 2 : 0, s.drawCode == GLES20.GL_TRIANGLE_FAN? 30 : s.drawCode == GLES20.GL_LINE_LOOP ? 29 : 3);     
 	}
 	
 	@Override
