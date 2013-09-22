@@ -21,25 +21,25 @@ public class BottomOverlay extends RelativeLayout{
 		this.width = this.getWidth();
 		float alpha = 0.5f;
 		b.add(new ImageButton(context)); // Extrude
-		b.get(0).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button));
+		b.get(0).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
 		b.get(0).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Line
-		b.get(1).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button));
+		b.get(1).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
 		b.get(1).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Rectangle
-		b.get(2).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button));
+		b.get(2).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
 		b.get(2).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Circle
-		b.get(3).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button));
+		b.get(3).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
 		b.get(3).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Free
-		b.get(4).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button));
+		b.get(4).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
 		b.get(4).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Zoom
-		b.get(5).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button));
+		b.get(5).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
 		b.get(5).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Pan
-		b.get(6).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button));
+		b.get(6).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
 		b.get(6).setAlpha(alpha);
 		this.incr = width / b.size();
 		setup();
@@ -53,9 +53,10 @@ public class BottomOverlay extends RelativeLayout{
 	}
 	
 	public void setup(){
-		setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 200));
-		setBackgroundColor(Color.GREEN);
-		setPadding(20, 10, 20, 30);
+		setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 150));
+		//setBackgroundColor(Color.GRAY);
+		setPadding(20, 0, 20, 0);
+		
 		
 		ArrayList<RelativeLayout.LayoutParams> layout_params = new ArrayList<RelativeLayout.LayoutParams>();
 		for(int i = 0; i < b.size(); i++){
@@ -63,13 +64,14 @@ public class BottomOverlay extends RelativeLayout{
 			layout_params.add(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));			
 			if(i == 0){
 				layout_params.get(i).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-				layout_params.get(i).setMargins(0, 0, 0, 0);
+				layout_params.get(i).setMargins(15, 0, 0, 0);
 				b.get(i).setLayoutParams(layout_params.get(i));
 			}else {
-				layout_params.get(i).addRule(RelativeLayout.LEFT_OF, b.get(i-1).getId());
-				layout_params.get(i).setMargins(0, 0, 0, 0);
+				layout_params.get(i).addRule(RelativeLayout.RIGHT_OF, b.get(i-1).getId());
+				layout_params.get(i).setMargins(10, 0, 0, 0);
 				b.get(i).setLayoutParams(layout_params.get(i));
 			}
+			b.get(i).setBackground(null);
 			addView(b.get(i));
 		}
 		
@@ -116,8 +118,6 @@ public class BottomOverlay extends RelativeLayout{
             	Log.d("BottomOverlay", "Pan");
             }
         });
-		
-		
 	}
 	
 }

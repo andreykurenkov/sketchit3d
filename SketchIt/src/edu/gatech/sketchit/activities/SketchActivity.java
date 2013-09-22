@@ -12,6 +12,7 @@ import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.core.Mat;
 import org.opencv.core.Point3;
 
+import edu.gatech.sketchit.BottomOverlay;
 import edu.gatech.sketchit.MyGLRenderer;
 import edu.gatech.sketchit.R;
 import edu.gatech.sketchit.cv.ColorDetector;
@@ -33,6 +34,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
@@ -82,9 +84,16 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		mOpenCvCameraView.setCvCameraViewListener(this);
 		mGLView = new myGLSurfaceView(this);
 		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
-	
+		
+		RelativeLayout rl = new RelativeLayout(this);
+		BottomOverlay bo = new BottomOverlay(this);
+        RelativeLayout.LayoutParams layout_main = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 150);
+        layout_main.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        bo.setLayoutParams(layout_main);
+        rl.addView(bo);
+        
+        addContentView(rl,new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 	}
-
 
 	@Override
 	public void onPause()
