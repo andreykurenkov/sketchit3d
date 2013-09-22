@@ -38,7 +38,7 @@ public class ColorDetector {
 	}
 
 	public ColorDetector(double originalArea, Scalar hsvColor){
-		this(originalArea, hsvColor,new Scalar(15,15,25));
+		this(originalArea, hsvColor,new Scalar(15,15,10));
 	}
 
 	public ColorDetector(double originalArea, Scalar hsvColor, Scalar colorRadius){

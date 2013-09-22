@@ -125,10 +125,13 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		if(rightHand!=null){
 			Point3 clicked = rightHand.updateClickedState(mRgba);
 			Point3 cursor = rightHand.getPointing().getColorDetector().detectBiggestBlob(mRgba);
+			Point3 cursor2 = rightHand.getThumb().getColorDetector().detectBiggestBlob(mRgba);
+			System.out.println(cursor+" "+cursor2);
 			if(cursor!=null){
-				Log.i("Sketch",cursor.toString());
+				//Log.i("Sketch",cursor.toString());
 				mGLView.getRenderer().setCursor1(cursor);
 				if(clicked!=null){
+					Log.i("CLICK",clicked.toString());
 					long downTime = rightHand.getTimeOfDown();
 					//MotionEvent event = MotionEvent.obtain(downTime, eventTime, action, x, y, metaState)
 				}
