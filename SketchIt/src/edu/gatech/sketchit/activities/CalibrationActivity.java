@@ -203,7 +203,7 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 	        }
         }else{
         	Core.putText(mRgba, "Done!", new Point(5,45), 0/*font*/, 1, new Scalar(255, 255, 255, 255), 3);
-        	SketchActivity.launch(this, Finger.getHashMap());
+        	SketchActivityJCPT.launch(this, Finger.getHashMap());
         	finish();
         }
 

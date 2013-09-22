@@ -20,7 +20,7 @@ public abstract class Shape {
     protected int vertexCount;
 	protected float[] color = {1.0f, 0.0f, 0.0f, 1.0f};
     protected float[] coords;
-    protected Point3[] vertices;
+    public Point3[] vertices;
     
     public int drawCode;
     

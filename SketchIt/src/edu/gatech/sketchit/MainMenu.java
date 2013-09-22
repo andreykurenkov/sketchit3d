@@ -3,6 +3,7 @@ package edu.gatech.sketchit;
 //import edu.gatech.sketchit.activities.CalibrationActivity;
 import edu.gatech.sketchit.activities.CalibrationActivity;
 import edu.gatech.sketchit.activities.SketchActivity;
+import edu.gatech.sketchit.activities.SketchActivityJCPT;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -101,7 +102,7 @@ public class MainMenu extends Activity {
         home_new.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	Log.d("MainMenu.java", "New Clicked");
-            	Intent intent = new Intent(MainMenu.this, SketchActivity.class);
+            	Intent intent = new Intent(MainMenu.this, SketchActivityJCPT.class);
                 startActivity(intent);      
             }
         });

@@ -12,6 +12,7 @@ import edu.gatech.sketchit.shapes.*;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
+import android.util.Log;
 
 public class MyGLRenderer implements Renderer {
 	//model space
@@ -78,7 +79,7 @@ public class MyGLRenderer implements Renderer {
         
 //        GLES20.glVertexAttribPointer(0, 3, GLES20.GL_FLOAT, false, 3, ptr)
 //        GLES20.glDrawElements(GLES20.GL_TRIANGLE_FAN, count, type, indices)
-        GLES20.glDrawArrays(s.drawCode, s.drawCode == GLES20.GL_LINE_LOOP ? 2 : 0, s.drawCode == GLES20.GL_TRIANGLE_FAN? 8 : s.drawCode == GLES20.GL_LINE_LOOP ? 29 : 3);     
+        GLES20.glDrawArrays(s.drawCode,0, s.drawCode == GLES20.GL_LINE_LOOP ? 30 : 3);     
 	}
 	
 	@Override
@@ -94,9 +95,14 @@ public class MyGLRenderer implements Renderer {
         	draw(s);
         }
         if(cursor1 != null) {
+        	Log.i("MyGLRenderer","Cursor1 is "+cursor1);
+        	for(Point3 p:cursor1.vertices){
+        		Log.i("MyGLRenderer","vertex is "+p);
+        	}
         	draw(cursor1);
         }
         if(cursor2 != null) {
+        	//Log.i("MyGLRenderer","Cursor2 is "+cursor2);
         	draw(cursor2);
         }
 	}

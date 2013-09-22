@@ -38,7 +38,6 @@ public class HandState {
 		Point3 mid = new Point3( (pointingPoint.x + thumbPoint.x)/2,
 								 (pointingPoint.y + thumbPoint.y)/2,
 				   				 (pointingPoint.z + thumbPoint.z)/2);
-		//Log.i("click","DIIIIIIIIIIST"+dist);
 		return dist<CLICK_DIST?mid:null;
 	}
 	
