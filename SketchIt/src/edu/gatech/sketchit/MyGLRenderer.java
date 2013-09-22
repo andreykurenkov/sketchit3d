@@ -48,6 +48,15 @@ public class MyGLRenderer implements Renderer {
 	
 	public float mAngleX;
 	public float mAngleY;
+	public float zoom;
+	
+	private int lastWidth;
+	private int lastHeight;
+	
+	public void zoom(float z) {
+		zoom += z;
+		onSurfaceChanged(null, lastWidth, lastHeight);
+	}
 	
 	private void draw(Shape s) {
 		s.vertexBuffer.position(mPositionOffset);
@@ -96,6 +105,8 @@ public class MyGLRenderer implements Renderer {
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		lastWidth = width;
+		lastHeight = height;
 		GLES20.glViewport(0, 0, width, height);
 
 		// Create a new perspective projection matrix. The height will stay the same
@@ -105,8 +116,8 @@ public class MyGLRenderer implements Renderer {
 		final float right = ratio;
 		final float bottom = -1.0f;
 		final float top = 1.0f;
-		final float near = 1.0f;
-		final float far = 10.0f;
+		final float near = 1.0f + zoom*.001f;
+		final float far = 8.0f + zoom*0.1f;
 		
 		Matrix.frustumM(mProjectionMatrix, 0, left, right, bottom, top, near, far);
 	}

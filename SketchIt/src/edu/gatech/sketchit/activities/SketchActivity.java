@@ -80,7 +80,7 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
 		mOpenCvCameraView.setCvCameraViewListener(this);
-		mGLView = new AGLSurfaceView(this);
+		mGLView = new MyGLSurfaceView(this);
 		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 	
 	}
@@ -131,15 +131,16 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	}
 }
 
-class AGLSurfaceView extends GLSurfaceView {
+class MyGLSurfaceView extends GLSurfaceView {
 	private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
 	private float mPreviousX;
 	private float mPreviousY;
 	private float mPreviousZ;
 	private final MyGLRenderer mRenderer;
 	private boolean generated;
+	private boolean zoomMode= true;
 
-	public AGLSurfaceView(Context context) {
+	public MyGLSurfaceView(Context context) {
 		super(context);
 		setEGLContextClientVersion(2);
 		super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
@@ -148,7 +149,11 @@ class AGLSurfaceView extends GLSurfaceView {
 		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
 	}
-
+	
+	public void setZoomMode(boolean on) {
+		zoomMode = on;
+	}
+	
 	private void generate() {
 		System.out.println("rendering");
 //		Point3[] rand = Shape.randomShape(4);
@@ -156,12 +161,12 @@ class AGLSurfaceView extends GLSurfaceView {
 //		mRenderer.addShape(r);
 //		requestRender();
 
-//		for(int i=0;i<50;i++) {
-//			Point3[] rand = Shape.randomShape(2);
-//			Shape r = new Line(rand[0], rand[1]);
-//			mRenderer.addShape(r);
-//		}
-//		requestRender();
+		for(int i=0;i<50;i++) {
+			Point3[] rand = Shape.randomShape(2);
+			Shape r = new Line(rand[0], rand[1]);
+			mRenderer.addShape(r);
+		}
+		requestRender();
 //		for(int i=0;i<5;i++) {
 //			Point3[] rand = Shape.randomShape(4);
 //			Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
@@ -190,12 +195,16 @@ class AGLSurfaceView extends GLSurfaceView {
 
 			float dx = x - mPreviousX;
 			float dy = y - mPreviousY;
-
-                mRenderer.mAngleX += (dx) * TOUCH_SCALE_FACTOR; 
-                mRenderer.mAngleY += (dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
-
-	            requestRender();
-	        }
+			
+			if(zoomMode) {
+				mRenderer.zoom(dy);
+			}
+			else {
+	            mRenderer.mAngleX += (dx) * TOUCH_SCALE_FACTOR; 
+	            mRenderer.mAngleY += (dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
+			}
+            requestRender();
+	   }
 
 
 		mPreviousX = x;
