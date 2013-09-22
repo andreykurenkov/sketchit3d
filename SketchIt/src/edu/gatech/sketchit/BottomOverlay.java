@@ -20,25 +20,25 @@ public class BottomOverlay extends RelativeLayout{
 		this.width = this.getWidth();
 		float alpha = 0.5f;
 		b.add(new ImageButton(context)); // Extrude
-		b.get(0).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
+		b.get(0).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.extrude));
 		b.get(0).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Line
-		b.get(1).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
+		b.get(1).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.line));
 		b.get(1).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Rectangle
-		b.get(2).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
+		b.get(2).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.rectangle));
 		b.get(2).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Circle
-		b.get(3).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
+		b.get(3).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.circle));
 		b.get(3).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Free
-		b.get(4).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
+		b.get(4).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.free));
 		b.get(4).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Zoom
-		b.get(5).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
+		b.get(5).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.zoom));
 		b.get(5).setAlpha(alpha);
 		b.add(new ImageButton(context)); // Pan
-		b.get(6).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.generic_button2));
+		b.get(6).setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pan));
 		b.get(6).setAlpha(alpha);
 		this.incr = width / b.size();
 		setup();
