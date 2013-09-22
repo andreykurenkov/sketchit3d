@@ -78,43 +78,43 @@ public class BottomOverlay extends RelativeLayout{
 		b.get(0).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: home_open onclicklistener
-            	Log.d("BottomOverlay", "Extrude");
+            	Log.i("BottomOverlay", "Extrude");
             }
         });
 		b.get(1).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: home_open onclicklistener
-            	Log.d("BottomOverlay", "Line");
+            	Log.i("BottomOverlay", "Line");
             }
         });
 		b.get(2).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: home_open onclicklistener
-            	Log.d("BottomOverlay", "Rectangle");
+            	Log.i("BottomOverlay", "Rectangle");
             }
         });
 		b.get(3).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: home_open onclicklistener
-            	Log.d("BottomOverlay", "Circle");
+            	Log.i("BottomOverlay", "Circle");
             }
         });
 		b.get(4).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: home_open onclicklistener
-            	Log.d("BottomOverlay", "Free Form");
+            	Log.i("BottomOverlay", "Free Form");
             }
         });
 		b.get(5).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: home_open onclicklistener
-            	Log.d("BottomOverlay", "Zoom");
+            	Log.i("BottomOverlay", "Zoom");
             }
         });
 		b.get(6).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: home_open onclicklistener
-            	Log.d("BottomOverlay", "Pan");
+            	Log.i("BottomOverlay", "Pan");
             }
         });
 	}
