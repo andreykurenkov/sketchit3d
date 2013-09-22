@@ -21,7 +21,7 @@ public class MainMenu extends Activity {
 	    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
         //Create Objects
         ImageButton home_logo = new ImageButton(this);
         ImageButton home_new = new ImageButton(this);
@@ -126,7 +126,7 @@ public class MainMenu extends Activity {
         });
         
         //Output
-        rl.setBackgroundColor(Color.GRAY);
+        rl.setBackgroundResource(R.drawable.background);
         setContentView(rl);
         
     }
