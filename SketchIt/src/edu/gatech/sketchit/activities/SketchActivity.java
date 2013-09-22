@@ -172,20 +172,20 @@ class MyGLSurfaceView extends GLSurfaceView {
 		//		mRenderer.addShape(r);
 		//		requestRender();
 
-//		for(int i=0;i<50;i++) {
-//			Point3[] rand = Shape.randomShape(2);
-//			Shape r = new Line(rand[0], rand[1]);
-//			mRenderer.addShape(r);
-//		}
-//		requestRender();
+		for(int i=0;i<150;i++) {
+			Point3[] rand = Shape.randomShape(2);
+			Shape r = new Line(rand[0], rand[1]);
+			mRenderer.addShape(r);
+		}
+		requestRender();
 //		for(int i=0;i<5;i++) {
 //			Point3[] rand = Shape.randomShape(4);
 //			Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
 //			mRenderer.addShape(r);
 //		}
-		Shape r = new Circle(new Point3(0, 0, 0), 3f);
-		mRenderer.addShape(r);
-		requestRender();
+		//Shape r = new Circle(new Point3(0, 0, 0), 3f);
+	//	mRenderer.addShape(r);
+	//	requestRender();
 	}
 
 	@Override

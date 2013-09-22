@@ -3,6 +3,7 @@ package edu.gatech.sketchit;
 //import edu.gatech.sketchit.activities.CalibrationActivity;
 
 import edu.gatech.sketchit.activities.CalibrationActivity;
+import edu.gatech.sketchit.activities.SketchActivity;
 import edu.gatech.sketchit.activities.SketchActivityJCPT;
 import android.os.Bundle;
 import android.app.Activity;
@@ -108,6 +109,8 @@ public class MainMenu extends Activity {
             public void onClick(View v) {
                 //TODO: home_open onclicklistener
             	Log.d("MainMenu.java", "Open Clicked");
+            	Intent intent = new Intent(MainMenu.this, SketchActivity.class);
+                startActivity(intent); 
             }
         });
         home_calibrate.setOnClickListener(new View.OnClickListener() {
