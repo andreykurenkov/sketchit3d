@@ -156,7 +156,6 @@ public class CalibrationActivity extends Activity implements OnTouchListener, Cv
 
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
-		System.out.println(mRgba.cols()+" "+mRgba.rows()+" "+mRgba);
 
         int cols = mRgba.cols();
         int rows = mRgba.rows();
