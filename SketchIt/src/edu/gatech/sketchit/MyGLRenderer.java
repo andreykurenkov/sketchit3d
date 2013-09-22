@@ -270,7 +270,6 @@ public class MyGLRenderer implements Renderer {
         GLES20.glUseProgram(programHandle);       
 		
 	}
-
 	
 	public void addShape(Shape s) {
 		shapes.add(s);
@@ -291,9 +290,11 @@ public class MyGLRenderer implements Renderer {
 		cursor2 = new Cursor(location);
 		this.onDrawFrame(null);
 	}
+	
 	public void clearCursor1() {
 		cursor1 = null;
 	}
+	
 	public void clearCursor2() {
 		cursor2 = null;
 	}
