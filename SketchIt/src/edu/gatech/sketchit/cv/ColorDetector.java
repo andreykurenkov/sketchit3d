@@ -23,6 +23,10 @@ public class ColorDetector {
 	private Mat spectrum;
 	private double originalArea;
 
+	private int AREA_AVR_LEN=10;
+	private double[] areaAverage;
+	private int areaCount;
+	
 	public static Scalar getHSVScalar(int red, int green, int blue){
 		float[] hsv = new float[3];
 		Color.RGBToHSV(red, green, blue, hsv);
@@ -34,10 +38,12 @@ public class ColorDetector {
 	}
 
 	public ColorDetector(double originalArea, Scalar hsvColor){
-		this(originalArea, hsvColor,new Scalar(25,25,35));
+		this(originalArea, hsvColor,new Scalar(15,15,25));
 	}
 
 	public ColorDetector(double originalArea, Scalar hsvColor, Scalar colorRadius){
+		this.areaAverage = new double[AREA_AVR_LEN];
+		this.areaCount = 0;
 		this.originalArea = originalArea;
 		double minH = (hsvColor.val[0] >= colorRadius.val[0]) ? hsvColor.val[0]-colorRadius.val[0] : 0;
 		double maxH = (hsvColor.val[0]+colorRadius.val[0] <= 255) ? hsvColor.val[0]+colorRadius.val[0] : 255;
@@ -78,9 +84,12 @@ public class ColorDetector {
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 		Mat hierarchy = new Mat();
 		MatOfPoint biggest = getBiggestContour(image);
-		if(biggest==null)
+		if(biggest==null){
+			areaCount=0;
 			return null;
+		}
 		Rect boundRect = Imgproc.boundingRect(biggest);
+		areaAverage[(areaCount++)%AREA_AVR_LEN]=boundRect.area();
 		return getPoint3(boundRect);
 	}
 	
@@ -138,7 +147,11 @@ public class ColorDetector {
 	public Point3 getPoint3(Rect rect){
 		Point tl= rect.tl();
 		Point br= rect.br();
-		return new Point3((tl.x + br.x)/2,(tl.y + br.y)/2,rect.area()/originalArea);
+		double avrArea = 0;
+		for(int i=0;i<AREA_AVR_LEN;i++)
+			avrArea+=areaAverage[i];
+		avrArea/=AREA_AVR_LEN;
+		return new Point3((tl.x + br.x)/2,(tl.y + br.y)/2,avrArea/originalArea);
 	}
 
 	public static double getCountourArea(MatOfPoint contour){

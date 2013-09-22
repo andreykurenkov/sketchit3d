@@ -59,6 +59,8 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		if(hashMap.containsKey(finger_id.Pointer_Left) && hashMap.containsKey(finger_id.Thumb_Left)){
 			Finger leftMiddle = hashMap.containsKey(finger_id.Middle_Left)?hashMap.get(finger_id.Middle_Left):null;
 			leftHand = new HandState(hashMap.get(finger_id.Pointer_Left),hashMap.get(finger_id.Thumb_Left),leftMiddle);
+		}
+		if(hashMap.containsKey(finger_id.Pointer_Right) && hashMap.containsKey(finger_id.Thumb_Right)){
 			Finger rightMiddle = hashMap.containsKey(finger_id.Middle_Right)?hashMap.get(finger_id.Middle_Right):null;
 			rightHand = new HandState(hashMap.get(finger_id.Pointer_Right),hashMap.get(finger_id.Thumb_Right),rightMiddle);
 		}
@@ -75,15 +77,15 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		mOpenCvCameraView.setCvCameraViewListener(this);
 		mGLView = new MyGLSurfaceView(this);
 		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
-		
+
 		RelativeLayout rl = new RelativeLayout(this);
 		BottomOverlay bo = new BottomOverlay(this);
-        RelativeLayout.LayoutParams layout_main = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 150);
-        layout_main.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        bo.setLayoutParams(layout_main);
-        rl.addView(bo);
-        
-        addContentView(rl,new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		RelativeLayout.LayoutParams layout_main = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 150);
+		layout_main.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		bo.setLayoutParams(layout_main);
+		rl.addView(bo);
+
+		addContentView(rl,new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 	}
 
 	@Override
@@ -123,10 +125,13 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		if(rightHand!=null){
 			Point3 clicked = rightHand.updateClickedState(mRgba);
 			Point3 cursor = rightHand.getPointing().getColorDetector().detectBiggestBlob(mRgba);
-			mGLView.getRenderer().setCursor1(cursor);
-			if(clicked!=null){
-				long downTime = rightHand.getTimeOfDown();
-				//MotionEvent event = MotionEvent.obtain(downTime, eventTime, action, x, y, metaState)
+			if(cursor!=null){
+				Log.i("Sketch",cursor.toString());
+				mGLView.getRenderer().setCursor1(cursor);
+				if(clicked!=null){
+					long downTime = rightHand.getTimeOfDown();
+					//MotionEvent event = MotionEvent.obtain(downTime, eventTime, action, x, y, metaState)
+				}
 			}
 		}
 		return mRgba;
@@ -152,16 +157,16 @@ class MyGLSurfaceView extends GLSurfaceView {
 		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
 	}
-	
+
 	public void setZoomMode(boolean on) {
 		zoomMode = on;
 	}
-	
+
 	private void generate() {
-//		Point3[] rand = Shape.randomShape(4);
-//		Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
-//		mRenderer.addShape(r);
-//		requestRender();
+		//		Point3[] rand = Shape.randomShape(4);
+		//		Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
+		//		mRenderer.addShape(r);
+		//		requestRender();
 
 		for(int i=0;i<50;i++) {
 			Point3[] rand = Shape.randomShape(2);
@@ -169,11 +174,11 @@ class MyGLSurfaceView extends GLSurfaceView {
 			mRenderer.addShape(r);
 		}
 		requestRender();
-//		for(int i=0;i<5;i++) {
-//			Point3[] rand = Shape.randomShape(4);
-//			Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
-//			mRenderer.addShape(r);
-//		}
+		//		for(int i=0;i<5;i++) {
+		//			Point3[] rand = Shape.randomShape(4);
+		//			Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
+		//			mRenderer.addShape(r);
+		//		}
 		Shape r = new Circle(new Point3(0, 0, 0), 20);
 		mRenderer.addShape(r);
 		requestRender();
@@ -185,7 +190,7 @@ class MyGLSurfaceView extends GLSurfaceView {
 		if(!generated) {
 			generated = true;
 			generate();
-//			return true;
+			//			return true;
 		}
 
 		float x = e.getX();
@@ -196,23 +201,23 @@ class MyGLSurfaceView extends GLSurfaceView {
 
 			float dx = x - mPreviousX;
 			float dy = y - mPreviousY;
-			
+
 			if(zoomMode) {
 				mRenderer.zoom(dy);
 			}
 			else {
-	            mRenderer.mAngleX += (dx) * TOUCH_SCALE_FACTOR; 
-	            mRenderer.mAngleY += (dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
+				mRenderer.mAngleX += (dx) * TOUCH_SCALE_FACTOR; 
+				mRenderer.mAngleY += (dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 			}
-            requestRender();
-	   }
+			requestRender();
+		}
 
 
 		mPreviousX = x;
 		mPreviousY = y;
 		return true;
 	}	
-	
+
 	public MyGLRenderer getRenderer(){
 		return mRenderer;
 	}
