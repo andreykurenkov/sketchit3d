@@ -7,89 +7,46 @@ import java.util.Random;
 
 import org.opencv.core.Point3;
 
-import edu.gatech.sketchit.AGLRenderer;
+import edu.gatech.sketchit.MyGLRenderer;
 import android.opengl.GLES20;
 
 
+
 public abstract class Shape {
-	protected static final String vertexShaderCode =
-			"uniform mat4 uMVPMatrix;" +
-		    "attribute vec4 vPosition;" +
-		    "void main() {" +
-		    "  gl_Position = vPosition * uMVPMatrix;" +
-		    "  gl_PointSize = 3;" +
-		    "}";
-	protected static final String fragmentShaderCode =
-		    "precision mediump float;" +
-		    "uniform vec4 vColor;" +
-		    "void main() {" +
-		    "  gl_FragColor = vColor;" +
-		    "}";
 	
-	protected static final int vertexShader = AGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-    protected static final int fragmentShader = AGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-    protected static final int COORDS_PER_VERTEX = 3;
-    protected static final int vertexStride = COORDS_PER_VERTEX * 4;
-    
-    protected FloatBuffer vertexBuffer;
-	protected static int mProgram = GLES20.glCreateProgram();             // create empty OpenGL ES Program
-    
-    protected int mPositionHandle;
-    protected int mColorHandle;
-    protected int mMVPMatrixHandle;
-    
+    public FloatBuffer vertexBuffer;
+    public FloatBuffer colorBuffer;
+        
     protected int vertexCount;
-	protected float[] color = {0.0f, 0.0f, 0.0f, 1.0f};
+	protected float[] color = {1.0f, 0.0f, 0.0f, 1.0f};
     protected float[] coords;
+    protected Point3[] vertices;
     
-    static {
-    	GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
-        GLES20.glAttachShader(mProgram, fragmentShader); // add the fragment shader to program
-        GLES20.glLinkProgram(mProgram);
+    public int drawCode;
+    
+    public Shape(){}
+    public Shape(Point3... vertices) {
+    	this.vertices = vertices;
+		loadBuffer();
     }
     
-    public Shape(Point3... vertices) {
-    	coords = new float[COORDS_PER_VERTEX*vertices.length];
+    protected void loadBuffer() {
+    	coords = new float[3*vertices.length];
 		for(int i=0;i<vertices.length;i++) {
 			coords[3*i] = (float)vertices[i].x;
 			coords[3*i+1] = (float)vertices[i].y;
 			coords[3*i+2] = (float)vertices[i].z;
 		}
-
+    	vertexBuffer = ByteBuffer.allocateDirect(coords.length * MyGLRenderer.mBytesPerFloat)
+				.order(ByteOrder.nativeOrder()).asFloatBuffer();
+		vertexBuffer.put(coords).position(0);
+		
+		colorBuffer = ByteBuffer.allocateDirect(color.length * MyGLRenderer.mBytesPerFloat)
+				.order(ByteOrder.nativeOrder()).asFloatBuffer();
+		colorBuffer.put(color).position(0);
     }
     
-    /**
-     * Should be called by the sub-class's constructor
-     */
-    protected void setup() {
-    	vertexCount = coords.length / COORDS_PER_VERTEX;
-		ByteBuffer bb = ByteBuffer.allocateDirect(coords.length * 4);
-		bb.order(ByteOrder.nativeOrder());
-		
-		vertexBuffer = bb.asFloatBuffer();
-		vertexBuffer.put(coords);
-		vertexBuffer.position(0);
-    }
     
-    public void draw(float[] mvpMatrix) {
-    	setup();
-    	
-		GLES20.glUseProgram(mProgram);
-		
-		mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
-		GLES20.glEnableVertexAttribArray(mPositionHandle);
-		GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
-                GLES20.GL_FLOAT, false,
-                vertexStride, vertexBuffer);
-		
-		mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
-		GLES20.glUniform4fv(mColorHandle, 1, color, 0);
-
-		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
-
-		//sub class draws here
-	}
     
     public static Point3[] randomShape(int numVertices){
     	Point3[] vertices = new Point3[numVertices];
@@ -107,7 +64,7 @@ public abstract class Shape {
     //AASHISH MODIFIED
     protected int contains_variance = 5;  
     public abstract boolean contains(Point3 hand);
-    private boolean inLine(Point3 a, Point3 b, Point3 hand){
+    protected boolean inLine(Point3 a, Point3 b, Point3 hand){
     	Point3 origvect = new Point3(a.x - b.x, a.y - b.y, a.z - b.z);
     	Point3 currvect = new Point3(a.x - hand.x, a.y - hand.y, a.z - hand.z);
     	

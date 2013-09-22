@@ -12,9 +12,10 @@ import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.core.Mat;
 import org.opencv.core.Point3;
 
-import edu.gatech.sketchit.AGLRenderer;
+import edu.gatech.sketchit.MyGLRenderer;
 import edu.gatech.sketchit.R;
 import edu.gatech.sketchit.cv.ColorDetector;
+import edu.gatech.sketchit.shapes.Circle;
 import edu.gatech.sketchit.shapes.Line;
 import edu.gatech.sketchit.shapes.Rectangle;
 import edu.gatech.sketchit.shapes.Shape;
@@ -38,7 +39,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class SketchActivity extends Activity implements CvCameraViewListener2{
-	private GLSurfaceView mGLView;
+	private myGLSurfaceView mGLView;
 	private static HashMap<finger_id, Finger> detectors;
 	private static HandState rightHand, leftHand;
 	private CameraBridgeViewBase mOpenCvCameraView;
@@ -79,7 +80,7 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.gl_screen_view);
 		mOpenCvCameraView.setCvCameraViewListener(this);
-		mGLView = new AGLSurfaceView(this);
+		mGLView = new myGLSurfaceView(this);
 		addContentView(mGLView,new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 	
 	}
@@ -121,6 +122,8 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 		}
 		if(rightHand!=null){
 			Point3 clicked = rightHand.updateClickedState(mRgba);
+			Point3 cursor = rightHand.getPointing().getColorDetector().detectBiggestBlob(mRgba);
+			mGLView.getRenderer().setCursor1(cursor);
 			if(clicked!=null){
 				long downTime = rightHand.getTimeOfDown();
 				//MotionEvent event = MotionEvent.obtain(downTime, eventTime, action, x, y, metaState)
@@ -130,38 +133,53 @@ public class SketchActivity extends Activity implements CvCameraViewListener2{
 	}
 }
 
-class AGLSurfaceView extends GLSurfaceView {
+class myGLSurfaceView extends GLSurfaceView {
 	private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
 	private float mPreviousX;
 	private float mPreviousY;
 	private float mPreviousZ;
-	private final AGLRenderer mRenderer;
+	private final MyGLRenderer mRenderer;
 	private boolean generated;
 
-	public AGLSurfaceView(Context context) {
+	public myGLSurfaceView(Context context) {
 		super(context);
 		setEGLContextClientVersion(2);
 		super.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-		mRenderer = new AGLRenderer();
+		mRenderer = new MyGLRenderer();
 		setRenderer(mRenderer);
 		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
 	}
 
 	private void generate() {
-		for(int i=0;i<50;i++) {
-			Point3[] rand = Shape.randomShape(2);
-			Shape r = new Line(rand[0], rand[1]);
-			mRenderer.addShape(r);
-			requestRender();
-		}
+//		Point3[] rand = Shape.randomShape(4);
+//		Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
+//		mRenderer.addShape(r);
+//		requestRender();
+
+//		for(int i=0;i<50;i++) {
+//			Point3[] rand = Shape.randomShape(2);
+//			Shape r = new Line(rand[0], rand[1]);
+//			mRenderer.addShape(r);
+//		}
+//		requestRender();
+//		for(int i=0;i<5;i++) {
+//			Point3[] rand = Shape.randomShape(4);
+//			Shape r = new Rectangle(rand[0], rand[1], rand[2], rand[3]);
+//			mRenderer.addShape(r);
+//		}
+		Shape r = new Circle(new Point3(0, 0, 0), 20);
+		mRenderer.addShape(r);
+		requestRender();
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
+		System.out.println("touched happening");
 		if(!generated) {
 			generated = true;
 			generate();
+//			return true;
 		}
 
 		float x = e.getX();
@@ -173,22 +191,19 @@ class AGLSurfaceView extends GLSurfaceView {
 			float dx = x - mPreviousX;
 			float dy = y - mPreviousY;
 
-			// reverse direction of rotation above the mid-line
-			if (y > getHeight() / 2) {
-				dx = dx * -1 ;
-			}
+                mRenderer.mAngleX += (dx) * TOUCH_SCALE_FACTOR; 
+                mRenderer.mAngleY += (dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
 
-			// reverse direction of rotation to left of the mid-line
-			if (x < getWidth() / 2) {
-				dy = dy * -1 ;
-			}
+	            requestRender();
+	        }
 
-			mRenderer.mAngle += (dx + dy) * TOUCH_SCALE_FACTOR;  // = 180.0f / 320
-			requestRender();
-		}
 
 		mPreviousX = x;
 		mPreviousY = y;
 		return true;
-	}	   
+	}	
+	
+	public MyGLRenderer getRenderer(){
+		return mRenderer;
+	}
 }
